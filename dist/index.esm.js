@@ -136,7 +136,9 @@ var UnsplashWrapper = function () {
     };
 
     this.searchPhotos = function (query, page, perPage) {
-      return _this2.unsplash.search.getPhotos({ query: query, page: page, perPage: perPage }).then(_this2.processResponse).then(function (_ref3) {
+      var customQueryParams = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+      return _this2.unsplash.search.getPhotos(_extends({ query: query, page: page, perPage: perPage }, customQueryParams)).then(_this2.processResponse).then(function (_ref3) {
         var response = _ref3.response;
         return response;
       });
@@ -975,7 +977,7 @@ var UnsplashPicker = function (_React$Component) {
 
       var page = append ? _this.state.page : 1;
 
-      return unsplash.searchPhotos(search, _this.state.page, _this.resultsPerPage).then(function (response) {
+      return unsplash.searchPhotos(search, _this.state.page, _this.resultsPerPage, _this.state.customQueryParams).then(function (response) {
         return _this.setState(function (prevState) {
           return {
             totalPhotosCount: response.total,
@@ -1062,7 +1064,9 @@ var UnsplashPicker = function (_React$Component) {
       searchResultsWidth: null,
       isAtBottomOfSearchResults: true,
       page: 1,
-      error: null
+      error: null,
+      placeholder: props.placeholder,
+      customQueryParams: props.customQueryParams
     };
     return _this;
   }
@@ -1185,7 +1189,7 @@ var UnsplashPicker = function (_React$Component) {
           React.createElement("input", {
             type: "text",
             value: search,
-            placeholder: "Search Unsplash photos by topics or colors",
+            placeholder: this.state.placeholder,
             onChange: this.handleSearchChange,
             style: inputNoAppearanceStyle,
             className: "f-1",
@@ -1303,6 +1307,8 @@ var UnsplashPicker = function (_React$Component) {
 }(React.Component);
 
 UnsplashPicker.propTypes = {
+  customQueryParams: object$4,
+  placeholder: string$9,
   accessKey: string$9.isRequired,
   applicationName: string$9.isRequired,
   columns: number$3,
@@ -1318,6 +1324,7 @@ UnsplashPicker.propTypes = {
   __debug_chaosMonkey: bool
 };
 UnsplashPicker.defaultProps = {
+  placeholder: 'Search Unsplash photos by topics or colors',
   columns: 3,
   defaultSearch: "",
   highlightColor: "#00adf0",

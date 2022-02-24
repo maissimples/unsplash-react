@@ -67,6 +67,8 @@ name                  | type                       | required | default   | desc
 `photoRatio`          | `number`                   | no       | `3 / 2`   | The `width/height` ratio for displaying search results
 `preferredSize`       | `shape({ width, height })` | no       | n/a       | Your application's preferred width and height for downloaded images. If not set, `react-unsplash` will download full size images
 `Uploader`            | Component                  | no       | `Base64Uploader` | The component used to upload photos from Unsplash to your application.
+`placeholder`         | `string`                   | no        | `Search Unsplash photos by topics or colors` | Update the input's placeholder
+`customQueryParam`    | `object`                   | no        | n/a   | Add custom query params to search request 
 
 ## `<Uploader />` Props
 

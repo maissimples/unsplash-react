@@ -36,6 +36,8 @@ const borderRadius = 3
 
 export default class UnsplashPicker extends React.Component {
   static propTypes = {
+    customQueryParams: object,
+    placeholder: string,
     accessKey: string.isRequired,
     applicationName: string.isRequired,
     columns: number,
@@ -52,6 +54,8 @@ export default class UnsplashPicker extends React.Component {
   }
 
   static defaultProps = {
+    customQueryParams: {},
+    placeholder: 'Search Unsplash photos by topics or colors',
     columns: 3,
     defaultSearch: "",
     highlightColor: "#00adf0",
@@ -77,6 +81,8 @@ export default class UnsplashPicker extends React.Component {
       isAtBottomOfSearchResults: true,
       page: 1,
       error: null,
+      placeholder:props.placeholder,
+      customQueryParams: props.customQueryParams
     }
   }
 
@@ -151,9 +157,9 @@ export default class UnsplashPicker extends React.Component {
     }
 
     const page = append ? this.state.page : 1
-
+   
     return unsplash
-      .searchPhotos(search, this.state.page, this.resultsPerPage)
+      .searchPhotos(search, this.state.page, this.resultsPerPage, this.state.customQueryParams)
       .then(response =>
         this.setState(
           prevState => ({
@@ -301,7 +307,7 @@ export default class UnsplashPicker extends React.Component {
           <input
             type="text"
             value={search}
-            placeholder="Search Unsplash photos by topics or colors"
+            placeholder={this.state.placeholder}
             onChange={this.handleSearchChange}
             style={inputNoAppearanceStyle}
             className="f-1"

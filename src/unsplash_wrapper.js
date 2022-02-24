@@ -33,8 +33,8 @@ export default class UnsplashWrapper {
       then(({ response }) => response.results)
   }
 
-  searchPhotos = (query, page, perPage) => {
-    return this.unsplash.search.getPhotos({ query, page, perPage }).
+  searchPhotos = (query, page, perPage, customQueryParams={}) => {
+    return this.unsplash.search.getPhotos({ query, page, perPage, ...customQueryParams }).
       then(this.processResponse).
       then(({ response }) => response)
   }
