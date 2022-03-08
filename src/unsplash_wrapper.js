@@ -17,7 +17,10 @@ class ChaosMonkey {
       [401, "not authorized"],
     ]
     const error = errors[Math.round(Math.random() * (errors.length - 1))]
-    return new Response(JSON.stringify({}), { status: error[0], statusText: error[1] })
+    return new Response(JSON.stringify({}), {
+      status: error[0],
+      statusText: error[1],
+    })
   }
 }
 
@@ -28,31 +31,41 @@ export default class UnsplashWrapper {
   }
 
   listPhotos = (page, perPage, orderBy = "popular") => {
-    return this.unsplash.photos.list({ page, perPage, orderBy }).
-      then(this.processResponse).
-      then(({ response }) => response.results)
+    return this.unsplash.photos
+      .list({ page, perPage, orderBy })
+      .then(this.processResponse)
+      .then(({ response }) => response.results)
   }
 
-  searchPhotos = (query, page, perPage, customQueryParams={}) => {
-    return this.unsplash.search.getPhotos({ query, page, perPage, ...customQueryParams }).
-      then(this.processResponse).
-      then(({ response }) => response)
+  searchPhotos = (query, page, perPage, customQueryParams = {}, proxyUrl) => {
+    let newProxyUrl = `${proxyUrl}?query=${query}&page=${page}&perPage=${perPage}`
+    Object.keys(customQueryParams).forEach(key => {
+      newProxyUrl += `&${key}=${customQueryParams[key]}`
+    })
+
+    return fetch(newProxyUrl)
+      .then(resp => resp.json())
+      .then(resp => resp)
   }
 
   getPhoto = (id, { width, height } = {}) => {
-    return this.unsplash.photos.get({ photoId: id, width, height }).
-      then(this.processResponse).
-      then(({ response }) => response)
+    return this.unsplash.photos
+      .get({ photoId: id, width, height })
+      .then(this.processResponse)
+      .then(({ response }) => response)
   }
 
   downloadPhoto = photo => {
-    return this.unsplash.photos.trackDownload({ downloadLocation: photo.links.download_location }).
-      then(this.processResponse).
-      then(({ response }) => response)
+    return this.unsplash.photos
+      .trackDownload({ downloadLocation: photo.links.download_location })
+      .then(this.processResponse)
+      .then(({ response }) => response)
   }
 
   processResponse = incomingResponse => {
-    const response = Promise.resolve(this.__debug_chaosMonkey.process(incomingResponse))
+    const response = Promise.resolve(
+      this.__debug_chaosMonkey.process(incomingResponse)
+    )
 
     return response.then(this.handleErrors)
   }

@@ -36,6 +36,7 @@ const borderRadius = 3
 
 export default class UnsplashPicker extends React.Component {
   static propTypes = {
+    proxyUrl: string,
     customQueryParams: object,
     placeholder: string,
     accessKey: string.isRequired,
@@ -55,7 +56,7 @@ export default class UnsplashPicker extends React.Component {
 
   static defaultProps = {
     customQueryParams: {},
-    placeholder: 'Search Unsplash photos by topics or colors',
+    placeholder: "Search Unsplash photos by topics or colors",
     columns: 3,
     defaultSearch: "",
     highlightColor: "#00adf0",
@@ -81,8 +82,9 @@ export default class UnsplashPicker extends React.Component {
       isAtBottomOfSearchResults: true,
       page: 1,
       error: null,
-      placeholder:props.placeholder,
-      customQueryParams: props.customQueryParams
+      placeholder: props.placeholder,
+      customQueryParams: props.customQueryParams,
+      proxyUrl: props.proxyUrl,
     }
   }
 
@@ -121,7 +123,9 @@ export default class UnsplashPicker extends React.Component {
   }
 
   recalculateSearchResultsWidth = throttle(50, () => {
-    this.setState({ searchResultsWidth: this.searchResults.getBoundingClientRect().width })
+    this.setState({
+      searchResultsWidth: this.searchResults.getBoundingClientRect().width,
+    })
   })
 
   loadDefault = ({ append = false } = {}) => {
@@ -157,21 +161,29 @@ export default class UnsplashPicker extends React.Component {
     }
 
     const page = append ? this.state.page : 1
-   
+
     return unsplash
-      .searchPhotos(search, this.state.page, this.resultsPerPage, this.state.customQueryParams)
-      .then(response =>
+      .searchPhotos(
+        search,
+        this.state.page,
+        this.resultsPerPage,
+        this.state.customQueryParams,
+        this.state.proxyUrl
+      )
+      .then(response => {
         this.setState(
           prevState => ({
             totalPhotosCount: response.total,
-            photos: append ? prevState.photos.concat(response.results) : response.results,
+            photos: append
+              ? prevState.photos.concat(response.results)
+              : response.results,
             isLoadingSearch: false,
             error: null,
             page,
           }),
           append ? noop : this.didFinishLoadingNewSearchResults
         )
-      )
+      })
       .catch(e => this.setState({ error: e.message, isLoadingSearch: false }))
   }
 
@@ -193,9 +205,12 @@ export default class UnsplashPicker extends React.Component {
     const download = this.state.unsplash.downloadPhoto(photo)
 
     const downloadPromise = preferredSize
-      ? this.state.unsplash.getPhoto(photo.id, preferredSize).then(
-        r => `${r.urls.raw}&w=${preferredSize.width}&h=${preferredSize.height}`,
-      )
+      ? this.state.unsplash
+          .getPhoto(photo.id, preferredSize)
+          .then(
+            r =>
+              `${r.urls.raw}&w=${preferredSize.width}&h=${preferredSize.height}`
+          )
       : download.then(r => r.url)
 
     return downloadPromise
@@ -223,7 +238,11 @@ export default class UnsplashPicker extends React.Component {
   handleSearchResultsBottomIntersectionChange = isAtBottomOfSearchResults => {
     this.setState({ isAtBottomOfSearchResults })
 
-    if (isAtBottomOfSearchResults && !this.state.isLoadingSearch && this.hasMoreResults) {
+    if (
+      isAtBottomOfSearchResults &&
+      !this.state.isLoadingSearch &&
+      this.hasMoreResults
+    ) {
       this.setState(({ page }) => ({ page: page + 1 }))
     }
   }
@@ -245,7 +264,12 @@ export default class UnsplashPicker extends React.Component {
   }
 
   render() {
-    const { Uploader, columns: searchResultColumns, photoRatio, highlightColor } = this.props
+    const {
+      Uploader,
+      columns: searchResultColumns,
+      photoRatio,
+      highlightColor,
+    } = this.props
     const {
       photos,
       search,
@@ -314,11 +338,16 @@ export default class UnsplashPicker extends React.Component {
             ref={input => (this.searchInput = input)}
           />
           {totalPhotosCount !== null && (
-            <span style={{ color: inputDarkGray }}>{totalPhotosCount} results</span>
+            <span style={{ color: inputDarkGray }}>
+              {totalPhotosCount} results
+            </span>
           )}
         </div>
 
-        <div className="p-r f-1 border-radius" style={{ marginTop: ".5em", overflow: "hidden" }}>
+        <div
+          className="p-r f-1 border-radius"
+          style={{ marginTop: ".5em", overflow: "hidden" }}
+        >
           <div
             className="h-f unsplash-react__image-grid"
             style={{
@@ -330,10 +359,18 @@ export default class UnsplashPicker extends React.Component {
           >
             {error ? (
               <div
-                style={{ textAlign: "center", marginTop: "3em", padding: "0 1em", fontSize: 13 }}
+                style={{
+                  textAlign: "center",
+                  marginTop: "3em",
+                  padding: "0 1em",
+                  fontSize: 13,
+                }}
               >
                 <ErrorImage />
-                <p>We're having trouble communicating with Unsplash right now. Please try again.</p>
+                <p>
+                  We're having trouble communicating with Unsplash right now.
+                  Please try again.
+                </p>
                 <p style={{ color: inputGray }}>{error}</p>
               </div>
             ) : (
@@ -354,7 +391,9 @@ export default class UnsplashPicker extends React.Component {
                   <ReactIntersectionObserver
                     key="intersectionObserver"
                     root={this.searchResults}
-                    onIntersectionChange={this.handleSearchResultsBottomIntersectionChange}
+                    onIntersectionChange={
+                      this.handleSearchResultsBottomIntersectionChange
+                    }
                     style={{
                       width: "100%",
                       textAlign: "center",
@@ -457,7 +496,11 @@ function CSSStyles() {
   )
 }
 
-SearchInputIcon.propTypes = { isLoading: bool.isRequired, hasError: bool.isRequired, style: object }
+SearchInputIcon.propTypes = {
+  isLoading: bool.isRequired,
+  hasError: bool.isRequired,
+  style: object,
+}
 function SearchInputIcon({ isLoading, hasError, style, ...rest }) {
   const searchColor = hasError ? "#D62828" : inputGray
   const mergedStyle = { marginRight: ".5em", ...style }
@@ -472,7 +515,10 @@ function SearchInputIcon({ isLoading, hasError, style, ...rest }) {
   )
 }
 
-AbsolutelyCentered.propTypes = { width: number.isRequired, height: number.isRequired }
+AbsolutelyCentered.propTypes = {
+  width: number.isRequired,
+  height: number.isRequired,
+}
 function AbsolutelyCentered({ width, height, ...rest }) {
   return (
     <div
@@ -536,7 +582,8 @@ Photo.propTypes = {
     urls: shape({
       small: string.isRequired,
     }).isRequired,
-    user: shape({ links: shape({ html: string.isRequired }).isRequired }).isRequired,
+    user: shape({ links: shape({ html: string.isRequired }).isRequired })
+      .isRequired,
   }).isRequired,
   loadingPhoto: shape({ id: string.isRequired }),
   selectedPhoto: shape({ id: string.isRequired }),
@@ -554,7 +601,8 @@ function Photo({
 }) {
   const loadingPhotoId = loadingPhoto && loadingPhoto.id
   const selectedPhotoId = selectedPhoto && selectedPhoto.id
-  const isSelectedAndLoaded = loadingPhotoId === null && selectedPhotoId === photo.id
+  const isSelectedAndLoaded =
+    loadingPhotoId === null && selectedPhotoId === photo.id
   const borderWidth = 3
   const onClick = () => onPhotoClick(photo)
 
@@ -599,7 +647,10 @@ function Photo({
           </div>
         )}
       </div>
-      <div className="d-f" style={{ padding: `.15em ${borderWidth}px 0 ${borderWidth}px` }}>
+      <div
+        className="d-f"
+        style={{ padding: `.15em ${borderWidth}px 0 ${borderWidth}px` }}
+      >
         <OverflowFadeLink
           href={utmLink(photo.user.links.html)}
           target="_blank"

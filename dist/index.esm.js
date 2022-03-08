@@ -110,7 +110,10 @@ var ChaosMonkey = function () {
     value: function failResponse(_response) {
       var errors = [[400, "bad request"], [503, "gateway timeout"], [500, "server error"], [401, "not authorized"]];
       var error = errors[Math.round(Math.random() * (errors.length - 1))];
-      return new Response(JSON.stringify({}), { status: error[0], statusText: error[1] });
+      return new Response(JSON.stringify({}), {
+        status: error[0],
+        statusText: error[1]
+      });
     }
   }]);
   return ChaosMonkey;
@@ -137,27 +140,42 @@ var UnsplashWrapper = function () {
 
     this.searchPhotos = function (query, page, perPage) {
       var customQueryParams = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+      var proxyUrl = arguments[4];
 
-      return _this2.unsplash.search.getPhotos(_extends({ query: query, page: page, perPage: perPage }, customQueryParams)).then(_this2.processResponse).then(function (_ref3) {
-        var response = _ref3.response;
-        return response;
+      console.log(proxyUrl, query);
+      var newProxyUrl = proxyUrl + "?query=" + query + "&page=" + page + "&perPage=" + perPage;
+      Object.keys(customQueryParams).forEach(function (key) {
+        newProxyUrl += "&" + key + "=" + customQueryParams[key];
       });
+
+      return fetch(newProxyUrl).then(function (resp) {
+        return resp.json();
+      }).then(function (resp) {
+        console.log(resp);
+        return resp;
+      });
+      // .then(this.processResponse)
+      // .then(({ response }) => response)
+      // this.unsplash.search
+      //   .getPhotos({ query, page, perPage, ...customQueryParams })
+      //   .then(this.processResponse)
+      //   .then(({ response }) => response)
     };
 
     this.getPhoto = function (id) {
-      var _ref4 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-          width = _ref4.width,
-          height = _ref4.height;
+      var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          width = _ref3.width,
+          height = _ref3.height;
 
-      return _this2.unsplash.photos.get({ photoId: id, width: width, height: height }).then(_this2.processResponse).then(function (_ref5) {
-        var response = _ref5.response;
+      return _this2.unsplash.photos.get({ photoId: id, width: width, height: height }).then(_this2.processResponse).then(function (_ref4) {
+        var response = _ref4.response;
         return response;
       });
     };
 
     this.downloadPhoto = function (photo) {
-      return _this2.unsplash.photos.trackDownload({ downloadLocation: photo.links.download_location }).then(_this2.processResponse).then(function (_ref6) {
-        var response = _ref6.response;
+      return _this2.unsplash.photos.trackDownload({ downloadLocation: photo.links.download_location }).then(_this2.processResponse).then(function (_ref5) {
+        var response = _ref5.response;
         return response;
       });
     };
@@ -931,7 +949,9 @@ var UnsplashPicker = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (UnsplashPicker.__proto__ || Object.getPrototypeOf(UnsplashPicker)).call(this, props));
 
     _this.recalculateSearchResultsWidth = throttle(50, function () {
-      _this.setState({ searchResultsWidth: _this.searchResults.getBoundingClientRect().width });
+      _this.setState({
+        searchResultsWidth: _this.searchResults.getBoundingClientRect().width
+      });
     });
 
     _this.loadDefault = function () {
@@ -977,8 +997,9 @@ var UnsplashPicker = function (_React$Component) {
 
       var page = append ? _this.state.page : 1;
 
-      return unsplash.searchPhotos(search, _this.state.page, _this.resultsPerPage, _this.state.customQueryParams).then(function (response) {
-        return _this.setState(function (prevState) {
+      return unsplash.searchPhotos(search, _this.state.page, _this.resultsPerPage, _this.state.customQueryParams, _this.state.proxyUrl).then(function (response) {
+        console.log(response);
+        _this.setState(function (prevState) {
           return {
             totalPhotosCount: response.total,
             photos: append ? prevState.photos.concat(response.results) : response.results,
@@ -1066,7 +1087,8 @@ var UnsplashPicker = function (_React$Component) {
       page: 1,
       error: null,
       placeholder: props.placeholder,
-      customQueryParams: props.customQueryParams
+      customQueryParams: props.customQueryParams,
+      proxyUrl: props.proxyUrl
     };
     return _this;
   }
@@ -1206,7 +1228,10 @@ var UnsplashPicker = function (_React$Component) {
         ),
         React.createElement(
           "div",
-          { className: "p-r f-1 border-radius", style: { marginTop: ".5em", overflow: "hidden" } },
+          {
+            className: "p-r f-1 border-radius",
+            style: { marginTop: ".5em", overflow: "hidden" }
+          },
           React.createElement(
             "div",
             {
@@ -1223,7 +1248,12 @@ var UnsplashPicker = function (_React$Component) {
             error ? React.createElement(
               "div",
               {
-                style: { textAlign: "center", marginTop: "3em", padding: "0 1em", fontSize: 13 }
+                style: {
+                  textAlign: "center",
+                  marginTop: "3em",
+                  padding: "0 1em",
+                  fontSize: 13
+                }
               },
               React.createElement(ErrorImage, null),
               React.createElement(
@@ -1307,6 +1337,7 @@ var UnsplashPicker = function (_React$Component) {
 }(React.Component);
 
 UnsplashPicker.propTypes = {
+  proxyUrl: string$9,
   customQueryParams: object$4,
   placeholder: string$9,
   accessKey: string$9.isRequired,
@@ -1324,7 +1355,8 @@ UnsplashPicker.propTypes = {
   __debug_chaosMonkey: bool
 };
 UnsplashPicker.defaultProps = {
-  placeholder: 'Search Unsplash photos by topics or colors',
+  customQueryParams: {},
+  placeholder: "Search Unsplash photos by topics or colors",
   columns: 3,
   defaultSearch: "",
   highlightColor: "#00adf0",
@@ -1343,7 +1375,11 @@ function CSSStyles() {
   });
 }
 
-SearchInputIcon.propTypes = { isLoading: bool.isRequired, hasError: bool.isRequired, style: object$4 };
+SearchInputIcon.propTypes = {
+  isLoading: bool.isRequired,
+  hasError: bool.isRequired,
+  style: object$4
+};
 function SearchInputIcon(_ref5) {
   var isLoading = _ref5.isLoading,
       hasError = _ref5.hasError,
@@ -1359,7 +1395,10 @@ function SearchInputIcon(_ref5) {
   );
 }
 
-AbsolutelyCentered.propTypes = { width: number$3.isRequired, height: number$3.isRequired };
+AbsolutelyCentered.propTypes = {
+  width: number$3.isRequired,
+  height: number$3.isRequired
+};
 function AbsolutelyCentered(_ref6) {
   var width = _ref6.width,
       height = _ref6.height,
@@ -1498,7 +1537,10 @@ function Photo(_ref8) {
     ),
     React.createElement(
       "div",
-      { className: "d-f", style: { padding: ".15em " + borderWidth + "px 0 " + borderWidth + "px" } },
+      {
+        className: "d-f",
+        style: { padding: ".15em " + borderWidth + "px 0 " + borderWidth + "px" }
+      },
       React.createElement(
         OverflowFadeLink,
         {
