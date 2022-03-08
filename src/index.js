@@ -39,7 +39,7 @@ export default class UnsplashPicker extends React.Component {
     proxyUrl: string,
     customQueryParams: object,
     placeholder: string,
-    accessKey: string.isRequired,
+    accessKey: string,
     applicationName: string.isRequired,
     columns: number,
     defaultSearch: string,
@@ -55,6 +55,7 @@ export default class UnsplashPicker extends React.Component {
   }
 
   static defaultProps = {
+    accessKey: "",
     customQueryParams: {},
     placeholder: "Search Unsplash photos by topics or colors",
     columns: 3,
