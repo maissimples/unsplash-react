@@ -30,15 +30,17 @@ export default class UnsplashWrapper {
     this.unsplash = createApi({ accessKey })
   }
 
-  listPhotos = (page, perPage, orderBy = "popular") => {
-    return this.unsplash.photos
-      .list({ page, perPage, orderBy })
-      .then(this.processResponse)
-      .then(({ response }) => response.results)
+  // eslint-disable-next-line max-params
+  listPhotos = (page, perPage, proxyUrl, orderBy = "popular") => {
+    const newProxyUrl = `${proxyUrl}?&orderBy=${orderBy}&page=${page}&per_page=${perPage}`
+    return fetch(newProxyUrl)
+      .then(resp => resp.json())
+      .then(resp => resp)
   }
 
+  // eslint-disable-next-line max-params
   searchPhotos = (query, page, perPage, customQueryParams = {}, proxyUrl) => {
-    let newProxyUrl = `${proxyUrl}?query=${query}&page=${page}&perPage=${perPage}`
+    let newProxyUrl = `${proxyUrl}/search?query=${query}&page=${page}&per_page=${perPage}`
     Object.keys(customQueryParams).forEach(key => {
       newProxyUrl += `&${key}=${customQueryParams[key]}`
     })
@@ -55,11 +57,13 @@ export default class UnsplashWrapper {
       .then(({ response }) => response)
   }
 
-  downloadPhoto = photo => {
-    return this.unsplash.photos
-      .trackDownload({ downloadLocation: photo.links.download_location })
-      .then(this.processResponse)
-      .then(({ response }) => response)
+  downloadPhoto = (photo, proxyUrl) => {
+    const ixid = photo.links.download_location.split("ixid=")[1]
+    const newProxyUrl = `${proxyUrl}/download?id=${photo.id}&ixid=${ixid}`
+
+    return fetch(newProxyUrl)
+      .then(resp => resp.json())
+      .then(response => response)
   }
 
   processResponse = incomingResponse => {

@@ -132,8 +132,8 @@ export default class UnsplashPicker extends React.Component {
   loadDefault = ({ append = false } = {}) => {
     const page = append ? this.state.page : 1
     this.state.unsplash
-      .listPhotos(page, this.resultsPerPage)
-      .then(photos =>
+      .listPhotos(page, this.resultsPerPage, this.state.proxyUrl)
+      .then(photos => {
         this.setState(
           prevState => ({
             photos: append ? prevState.photos.concat(photos) : photos,
@@ -144,7 +144,7 @@ export default class UnsplashPicker extends React.Component {
           }),
           append ? noop : this.didFinishLoadingNewSearchResults
         )
-      )
+      })
       .catch(e => this.setState({ error: e.message, isLoadingSearch: false }))
   }
 
@@ -203,7 +203,10 @@ export default class UnsplashPicker extends React.Component {
   downloadPhoto = photo => {
     this.setState({ loadingPhoto: photo })
     const { preferredSize } = this.props
-    const download = this.state.unsplash.downloadPhoto(photo)
+    const download = this.state.unsplash.downloadPhoto(
+      photo,
+      this.state.proxyUrl
+    )
 
     const downloadPromise = preferredSize
       ? this.state.unsplash

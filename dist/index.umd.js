@@ -1222,12 +1222,14 @@
 
 	    classCallCheck(this, UnsplashWrapper);
 
-	    this.listPhotos = function (page, perPage) {
-	      var orderBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "popular";
+	    this.listPhotos = function (page, perPage, proxyUrl) {
+	      var orderBy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "popular";
 
-	      return _this2.unsplash.photos.list({ page: page, perPage: perPage, orderBy: orderBy }).then(_this2.processResponse).then(function (_ref2) {
-	        var response = _ref2.response;
-	        return response.results;
+	      var newProxyUrl = proxyUrl + "?&orderBy=" + orderBy + "&page=" + page + "&per_page=" + perPage;
+	      return fetch(newProxyUrl).then(function (resp) {
+	        return resp.json();
+	      }).then(function (resp) {
+	        return resp;
 	      });
 	    };
 
@@ -1235,8 +1237,7 @@
 	      var customQueryParams = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 	      var proxyUrl = arguments[4];
 
-	      console.log(proxyUrl, query);
-	      var newProxyUrl = proxyUrl + "?query=" + query + "&page=" + page + "&perPage=" + perPage;
+	      var newProxyUrl = proxyUrl + "/search?query=" + query + "&page=" + page + "&per_page=" + perPage;
 	      Object.keys(customQueryParams).forEach(function (key) {
 	        newProxyUrl += "&" + key + "=" + customQueryParams[key];
 	      });
@@ -1244,31 +1245,28 @@
 	      return fetch(newProxyUrl).then(function (resp) {
 	        return resp.json();
 	      }).then(function (resp) {
-	        console.log(resp);
 	        return resp;
 	      });
-	      // .then(this.processResponse)
-	      // .then(({ response }) => response)
-	      // this.unsplash.search
-	      //   .getPhotos({ query, page, perPage, ...customQueryParams })
-	      //   .then(this.processResponse)
-	      //   .then(({ response }) => response)
 	    };
 
 	    this.getPhoto = function (id) {
-	      var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-	          width = _ref3.width,
-	          height = _ref3.height;
+	      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	          width = _ref2.width,
+	          height = _ref2.height;
 
-	      return _this2.unsplash.photos.get({ photoId: id, width: width, height: height }).then(_this2.processResponse).then(function (_ref4) {
-	        var response = _ref4.response;
+	      return _this2.unsplash.photos.get({ photoId: id, width: width, height: height }).then(_this2.processResponse).then(function (_ref3) {
+	        var response = _ref3.response;
 	        return response;
 	      });
 	    };
 
-	    this.downloadPhoto = function (photo) {
-	      return _this2.unsplash.photos.trackDownload({ downloadLocation: photo.links.download_location }).then(_this2.processResponse).then(function (_ref5) {
-	        var response = _ref5.response;
+	    this.downloadPhoto = function (photo, proxyUrl) {
+	      var ixid = photo.links.download_location.split("ixid=")[1];
+	      var newProxyUrl = proxyUrl + "/download?id=" + photo.id + "&ixid=" + ixid;
+
+	      return fetch(newProxyUrl).then(function (resp) {
+	        return resp.json();
+	      }).then(function (response) {
 	        return response;
 	      });
 	    };
@@ -1282,6 +1280,12 @@
 	    this.__debug_chaosMonkey = new ChaosMonkey(__debug_chaosMonkey);
 	    this.unsplash = createApi({ accessKey: accessKey });
 	  }
+
+	  // eslint-disable-next-line max-params
+
+
+	  // eslint-disable-next-line max-params
+
 
 	  createClass(UnsplashWrapper, [{
 	    key: "handleErrors",
@@ -2870,8 +2874,8 @@
 	          append = _ref$append === undefined ? false : _ref$append;
 
 	      var page = append ? _this.state.page : 1;
-	      _this.state.unsplash.listPhotos(page, _this.resultsPerPage).then(function (photos) {
-	        return _this.setState(function (prevState) {
+	      _this.state.unsplash.listPhotos(page, _this.resultsPerPage, _this.state.proxyUrl).then(function (photos) {
+	        _this.setState(function (prevState) {
 	          return {
 	            photos: append ? prevState.photos.concat(photos) : photos,
 	            isLoadingSearch: false,
@@ -2908,7 +2912,6 @@
 	      var page = append ? _this.state.page : 1;
 
 	      return unsplash.searchPhotos(search, _this.state.page, _this.resultsPerPage, _this.state.customQueryParams, _this.state.proxyUrl).then(function (response) {
-	        console.log(response);
 	        _this.setState(function (prevState) {
 	          return {
 	            totalPhotosCount: response.total,
@@ -2943,7 +2946,7 @@
 	      _this.setState({ loadingPhoto: photo });
 	      var preferredSize = _this.props.preferredSize;
 
-	      var download = _this.state.unsplash.downloadPhoto(photo);
+	      var download = _this.state.unsplash.downloadPhoto(photo, _this.state.proxyUrl);
 
 	      var downloadPromise = preferredSize ? _this.state.unsplash.getPhoto(photo.id, preferredSize).then(function (r) {
 	        return r.urls.raw + "&w=" + preferredSize.width + "&h=" + preferredSize.height;
@@ -3250,7 +3253,7 @@
 	  proxyUrl: string$9,
 	  customQueryParams: object$4,
 	  placeholder: string$9,
-	  accessKey: string$9.isRequired,
+	  accessKey: string$9,
 	  applicationName: string$9.isRequired,
 	  columns: number$3,
 	  defaultSearch: string$9,
@@ -3265,6 +3268,7 @@
 	  __debug_chaosMonkey: bool
 	};
 	UnsplashPicker.defaultProps = {
+	  accessKey: "",
 	  customQueryParams: {},
 	  placeholder: "Search Unsplash photos by topics or colors",
 	  columns: 3,
