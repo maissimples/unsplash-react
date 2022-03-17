@@ -273,7 +273,9 @@ export default class UnsplashPicker extends React.Component {
       columns: searchResultColumns,
       photoRatio,
       highlightColor,
+      placeholder,
     } = this.props
+
     const {
       photos,
       search,
@@ -295,57 +297,40 @@ export default class UnsplashPicker extends React.Component {
       <ReactIntersectionObserver
         onIntersectionChange={this.recalculateSearchResultsWidth}
         style={{ flexDirection: "column" }}
-        className="unsplash-react d-f h-f p-0"
+        className="unsplash-react-root unsplash-react d-f h-f p-0"
       >
         <CSSStyles />
-        <span
-          style={{
-            color: inputGray,
-            fontSize: 12,
-            textAlign: "center",
-            display: "block",
-            marginBottom: "1em",
-          }}
-        >
-          Photos provided by{" "}
-          <a
-            href={this.utmLink("https://unsplash.com/")}
-            target="_blank"
-            style={{ color: inputGray }}
-          >
-            Unsplash
-          </a>
-        </span>
+
         <div
-          className="d-f"
+          className="d-f unsplash-react-wrapper"
           style={{
-            padding: ".5em",
-            border: `1px solid #DFDFDF`,
-            cursor: "text",
-            borderRadius: "3px",
-            fontSize: 13,
+            display: "flex",
+            alignItems: "center",
           }}
           onClick={this.handleSearchWrapperClick}
         >
-          <SearchInputIcon
-            isLoading={isLoadingSearch}
-            hasError={!!error}
-            style={{ marginRight: ".5em" }}
-          />
           <input
             type="text"
+            data-error={!!error}
             value={search}
-            placeholder={this.state.placeholder}
+            placeholder={placeholder}
             onChange={this.handleSearchChange}
-            style={inputNoAppearanceStyle}
-            className="f-1"
+            className="f-1 unspash-react-input"
             ref={input => (this.searchInput = input)}
           />
-          {totalPhotosCount !== null && (
+
+          <div className="unspash-react-search-icon">
+            {isLoadingSearch ? (
+              <Spinner size="1em" />
+            ) : (
+              <SearchIcon width="1em" height="1em" />
+            )}
+          </div>
+          {/* {totalPhotosCount !== null && (
             <span style={{ color: inputDarkGray }}>
               {totalPhotosCount} results
             </span>
-          )}
+          )} */}
         </div>
 
         <div
@@ -353,7 +338,7 @@ export default class UnsplashPicker extends React.Component {
           style={{ marginTop: ".5em", overflow: "hidden" }}
         >
           <div
-            className="h-f unsplash-react__image-grid"
+            className="h-f unsplash-react__image-grid unspash-react-image-grid"
             style={{
               overflowY: "scroll",
               "--imageWidth": `${searchResultWidth}px`,
@@ -482,17 +467,103 @@ function CSSStyles() {
         .unsplash-react.border-radius,
         .unsplash-react .border-radius { border-radius: ${borderRadius}px; }
 
-        .unsplash-react .unsplash-react__image-grid {
+
+        .unspash-react-image-grid{
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));
           gap: 12px;
+          padding: 8px;
+          padding-left: 16px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          scrollbar-color: #8492A6 transparent;
         }
+
+        .unspash-react-image-grid::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        .unspash-react-image-grid::-webkit-scrollbar-thumb {
+          border-radius: 8px;
+          background-clip: padding-box;
+          background-color: #8492A6;
+        }
+        .unspash-react-image-grid::-webkit-scrollbar-button {
+          width: 0;
+          height: 0;
+          display: none;
+        }
+        .unspash-react-image-grid::-webkit-scrollbar-corner {
+          background-color: transparent;
+        }
+
+        
 
         .unsplash-react__image {
           display: block;
           width: 100%;
           height: var(--imageHeight);
           object-fit: cover;
+        }
+
+        .unsplash-react-wrapper{
+          height: 30px,
+          line-height: 22px,
+          font-style: normal,
+          font-weight: normal,
+          font-size: 14px,
+          position: relative;
+          display: flex;
+          width: 100%;
+          position: relative;
+        }
+       
+        .unspash-react-input {
+          padding: 8px 16px;
+          outline: none;
+          border: none;
+          height: 100%;
+          outline: none;
+          width: 100%;
+          text-indent: 30px;
+          background: #F9FAFC;
+          border-bottom: 2px solid #D5E0ED;
+          border-radius: 4px 4px 0px 0px;
+        }
+        .unsplash-react input::placeholder {
+          opacity: 1
+          color: #8492A6;
+        }
+        .unspash-react-input:hover {
+          background: #F0F4F9;
+          border-bottom-color: #8492A6;
+        }        
+        .unspash-react-input:focus {
+          background: #EBF8FF;
+          border-bottom-color: #009AE7;
+        }
+        .unspash-react-input[data-error="true"] {
+          background: #FFE8E8;
+          border-bottom-color: #D83818;
+        }
+
+        .unspash-react-search-icon{
+          position: absolute;
+          top: 8px;
+          left: 16px;
+          z-index: 1;
+          color: #54677B;
+        }
+        .unspash-react-search-icon svg {
+          color: inherit;
+        }
+        
+        .unspash-react-input[data-error="true"] + .unspash-react-search-icon {
+          // color:  #D83818;
+        }
+
+        .unspash-react-input:focus + .unspash-react-search-icon {
+          // color: #009AE7;
         }
       `,
       }}
