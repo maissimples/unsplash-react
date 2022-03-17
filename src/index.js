@@ -19,19 +19,7 @@ import InsertIntoApplicationUploader from "./uploaders/insert_into_application_u
 
 function noop() {}
 
-const inputNoAppearanceStyle = {
-  border: "none",
-  padding: 0,
-  margin: 0,
-  backgroundColor: "transparent",
-  boxShadow: "none",
-  fontSize: "1em",
-  outline: "none",
-  height: "inherit",
-}
-
 const inputGray = "#AAA"
-const inputDarkGray = "#555"
 const borderRadius = 3
 
 export default class UnsplashPicker extends React.Component {
@@ -39,6 +27,7 @@ export default class UnsplashPicker extends React.Component {
     proxyUrl: string,
     customQueryParams: object,
     placeholder: string,
+    blankStateLabel: string,
     accessKey: string,
     applicationName: string.isRequired,
     columns: number,
@@ -58,6 +47,7 @@ export default class UnsplashPicker extends React.Component {
     accessKey: "",
     customQueryParams: {},
     placeholder: "Search Unsplash photos by topics or colors",
+    blankStateLabel: "No photos found",
     columns: 3,
     defaultSearch: "",
     highlightColor: "#00adf0",
@@ -274,6 +264,7 @@ export default class UnsplashPicker extends React.Component {
       photoRatio,
       highlightColor,
       placeholder,
+      blankStateLabel,
     } = this.props
 
     const {
@@ -326,6 +317,7 @@ export default class UnsplashPicker extends React.Component {
               <SearchIcon width="1em" height="1em" />
             )}
           </div>
+
           {/* {totalPhotosCount !== null && (
             <span style={{ color: inputDarkGray }}>
               {totalPhotosCount} results
@@ -395,6 +387,29 @@ export default class UnsplashPicker extends React.Component {
                 ),
               ]
             )}
+
+            {search.length > 0 &&
+              totalPhotosCount === 0 &&
+              !isLoadingSearch && (
+                <div className="unspash-react-no-results">
+                  <svg
+                    className="unspash-react-no-results-svg"
+                    width="64"
+                    height="64"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="32" cy="32" r="32" fill="#BDE5F9" />
+                    <path
+                      d="m43.595 41.367-5.672-5.672c-.14-.093-.281-.187-.422-.187h-.61c1.454-1.688 2.391-3.938 2.391-6.375 0-5.344-4.406-9.75-9.75-9.75-5.39 0-9.75 4.406-9.75 9.75 0 5.39 4.36 9.75 9.75 9.75 2.438 0 4.641-.89 6.375-2.344v.61c0 .14.047.28.141.421l5.672 5.672c.234.235.61.235.797 0l1.078-1.078c.234-.187.234-.562 0-.797Zm-14.063-4.734a7.462 7.462 0 0 1-7.5-7.5c0-4.125 3.328-7.5 7.5-7.5 4.125 0 7.5 3.375 7.5 7.5 0 4.172-3.375 7.5-7.5 7.5Z"
+                      fill="#fff"
+                    />
+                  </svg>
+                  <b className="unspash-react-no-results-label">
+                    {blankStateLabel}
+                  </b>
+                </div>
+              )}
           </div>
           <div
             className="p-a"
@@ -437,7 +452,10 @@ function CSSStyles() {
     <style
       dangerouslySetInnerHTML={{
         __html: `
-        .unsplash-react, .unsplash-react * { box-sizing: border-box }
+        .unsplash-react, .unsplash-react * { 
+          box-sizing: border-box;
+          font-family: inherit;
+        }
         .unsplash-react input::placeholder {
           color: ${inputGray};
           opacity: 1;
@@ -467,8 +485,8 @@ function CSSStyles() {
         .unsplash-react.border-radius,
         .unsplash-react .border-radius { border-radius: ${borderRadius}px; }
 
-
         .unspash-react-image-grid{
+          position: relative;
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));
           gap: 12px;
@@ -496,8 +514,6 @@ function CSSStyles() {
         .unspash-react-image-grid::-webkit-scrollbar-corner {
           background-color: transparent;
         }
-
-        
 
         .unsplash-react__image {
           display: block;
@@ -557,6 +573,27 @@ function CSSStyles() {
         .unspash-react-search-icon svg {
           color: inherit;
         }
+
+        .unspash-react-no-results {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: start;
+          align-items: center;
+          flex-direction: column;
+        }
+        .unspash-react-no-results-svg{
+          margin-top: 100px;
+        }
+
+        .unspash-react-no-results-label{
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 24px;
+          text-align: center;
+          margin-top: 24px;
+        }
         
         .unspash-react-input[data-error="true"] + .unspash-react-search-icon {
           // color:  #D83818;
@@ -568,25 +605,6 @@ function CSSStyles() {
       `,
       }}
     />
-  )
-}
-
-SearchInputIcon.propTypes = {
-  isLoading: bool.isRequired,
-  hasError: bool.isRequired,
-  style: object,
-}
-function SearchInputIcon({ isLoading, hasError, style, ...rest }) {
-  const searchColor = hasError ? "#D62828" : inputGray
-  const mergedStyle = { marginRight: ".5em", ...style }
-  return (
-    <div className="p-r d-f ai-c" style={mergedStyle} {...rest}>
-      {isLoading ? (
-        <Spinner size="1em" color={searchColor} />
-      ) : (
-        <SearchIcon width="1em" height="1em" style={{ color: searchColor }} />
-      )}
-    </div>
   )
 }
 

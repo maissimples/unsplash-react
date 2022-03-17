@@ -1155,7 +1155,8 @@ var UnsplashPicker = function (_React$Component) {
           searchResultColumns = _props.columns,
           photoRatio = _props.photoRatio,
           highlightColor = _props.highlightColor,
-          placeholder = _props.placeholder;
+          placeholder = _props.placeholder,
+          blankStateLabel = _props.blankStateLabel;
       var _state2 = this.state,
           photos = _state2.photos,
           search = _state2.search,
@@ -1270,7 +1271,31 @@ var UnsplashPicker = function (_React$Component) {
                 }
               },
               this.hasMoreResults && React.createElement(Spinner, { size: "40px" })
-            )]
+            )],
+            search.length > 0 && totalPhotosCount === 0 && !isLoadingSearch && React.createElement(
+              "div",
+              { className: "unspash-react-no-results" },
+              React.createElement(
+                "svg",
+                {
+                  className: "unspash-react-no-results-svg",
+                  width: "64",
+                  height: "64",
+                  fill: "none",
+                  xmlns: "http://www.w3.org/2000/svg"
+                },
+                React.createElement("circle", { cx: "32", cy: "32", r: "32", fill: "#BDE5F9" }),
+                React.createElement("path", {
+                  d: "m43.595 41.367-5.672-5.672c-.14-.093-.281-.187-.422-.187h-.61c1.454-1.688 2.391-3.938 2.391-6.375 0-5.344-4.406-9.75-9.75-9.75-5.39 0-9.75 4.406-9.75 9.75 0 5.39 4.36 9.75 9.75 9.75 2.438 0 4.641-.89 6.375-2.344v.61c0 .14.047.28.141.421l5.672 5.672c.234.235.61.235.797 0l1.078-1.078c.234-.187.234-.562 0-.797Zm-14.063-4.734a7.462 7.462 0 0 1-7.5-7.5c0-4.125 3.328-7.5 7.5-7.5 4.125 0 7.5 3.375 7.5 7.5 0 4.172-3.375 7.5-7.5 7.5Z",
+                  fill: "#fff"
+                })
+              ),
+              React.createElement(
+                "b",
+                { className: "unspash-react-no-results-label" },
+                blankStateLabel
+              )
+            )
           ),
           React.createElement("div", {
             className: "p-a",
@@ -1320,6 +1345,7 @@ UnsplashPicker.propTypes = {
   proxyUrl: string$9,
   customQueryParams: object$4,
   placeholder: string$9,
+  blankStateLabel: string$9,
   accessKey: string$9,
   applicationName: string$9.isRequired,
   columns: number$3,
@@ -1338,6 +1364,7 @@ UnsplashPicker.defaultProps = {
   accessKey: "",
   customQueryParams: {},
   placeholder: "Search Unsplash photos by topics or colors",
+  blankStateLabel: "No photos found",
   columns: 3,
   defaultSearch: "",
   highlightColor: "#00adf0",
@@ -1351,39 +1378,19 @@ UnsplashPicker.defaultProps = {
 function CSSStyles() {
   return React.createElement("style", {
     dangerouslySetInnerHTML: {
-      __html: "\n        .unsplash-react, .unsplash-react * { box-sizing: border-box }\n        .unsplash-react input::placeholder {\n          color: " + inputGray + ";\n          opacity: 1;\n        }\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0; }\n          to   { opacity: 1; }\n        }\n\n        .unsplash-react .p-r { position: relative; }\n        .unsplash-react .p-a { position: absolute; }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0; }\n\n        .unsplash-react .f-1 { flex: 1; }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex; }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100%; }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center; }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: " + borderRadius + "px; }\n\n\n        .unspash-react-image-grid{\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));\n          gap: 12px;\n          padding: 8px;\n          padding-left: 16px;\n          overflow-y: auto;\n          overflow-x: hidden;\n          scrollbar-color: #8492A6 transparent;\n        }\n\n        .unspash-react-image-grid::-webkit-scrollbar {\n          width: 8px;\n          height: 8px;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-thumb {\n          border-radius: 8px;\n          background-clip: padding-box;\n          background-color: #8492A6;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-button {\n          width: 0;\n          height: 0;\n          display: none;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-corner {\n          background-color: transparent;\n        }\n\n        \n\n        .unsplash-react__image {\n          display: block;\n          width: 100%;\n          height: var(--imageHeight);\n          object-fit: cover;\n        }\n\n        .unsplash-react-wrapper{\n          height: 30px,\n          line-height: 22px,\n          font-style: normal,\n          font-weight: normal,\n          font-size: 14px,\n          position: relative;\n          display: flex;\n          width: 100%;\n          position: relative;\n        }\n       \n        .unspash-react-input {\n          padding: 8px 16px;\n          outline: none;\n          border: none;\n          height: 100%;\n          outline: none;\n          width: 100%;\n          text-indent: 30px;\n          background: #F9FAFC;\n          border-bottom: 2px solid #D5E0ED;\n          border-radius: 4px 4px 0px 0px;\n        }\n        .unsplash-react input::placeholder {\n          opacity: 1\n          color: #8492A6;\n        }\n        .unspash-react-input:hover {\n          background: #F0F4F9;\n          border-bottom-color: #8492A6;\n        }        \n        .unspash-react-input:focus {\n          background: #EBF8FF;\n          border-bottom-color: #009AE7;\n        }\n        .unspash-react-input[data-error=\"true\"] {\n          background: #FFE8E8;\n          border-bottom-color: #D83818;\n        }\n\n        .unspash-react-search-icon{\n          position: absolute;\n          top: 8px;\n          left: 16px;\n          z-index: 1;\n          color: #54677B;\n        }\n        .unspash-react-search-icon svg {\n          color: inherit;\n        }\n        \n        .unspash-react-input[data-error=\"true\"] + .unspash-react-search-icon {\n          // color:  #D83818;\n        }\n\n        .unspash-react-input:focus + .unspash-react-search-icon {\n          // color: #009AE7;\n        }\n      "
+      __html: "\n        .unsplash-react, .unsplash-react * { \n          box-sizing: border-box;\n          font-family: inherit;\n        }\n        .unsplash-react input::placeholder {\n          color: " + inputGray + ";\n          opacity: 1;\n        }\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0; }\n          to   { opacity: 1; }\n        }\n\n        .unsplash-react .p-r { position: relative; }\n        .unsplash-react .p-a { position: absolute; }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0; }\n\n        .unsplash-react .f-1 { flex: 1; }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex; }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100%; }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center; }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: " + borderRadius + "px; }\n\n        .unspash-react-image-grid{\n          position: relative;\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));\n          gap: 12px;\n          padding: 8px;\n          padding-left: 16px;\n          overflow-y: auto;\n          overflow-x: hidden;\n          scrollbar-color: #8492A6 transparent;\n        }\n\n        .unspash-react-image-grid::-webkit-scrollbar {\n          width: 8px;\n          height: 8px;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-thumb {\n          border-radius: 8px;\n          background-clip: padding-box;\n          background-color: #8492A6;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-button {\n          width: 0;\n          height: 0;\n          display: none;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-corner {\n          background-color: transparent;\n        }\n\n        .unsplash-react__image {\n          display: block;\n          width: 100%;\n          height: var(--imageHeight);\n          object-fit: cover;\n        }\n\n        .unsplash-react-wrapper{\n          height: 30px,\n          line-height: 22px,\n          font-style: normal,\n          font-weight: normal,\n          font-size: 14px,\n          position: relative;\n          display: flex;\n          width: 100%;\n          position: relative;\n        }\n       \n        .unspash-react-input {\n          padding: 8px 16px;\n          outline: none;\n          border: none;\n          height: 100%;\n          outline: none;\n          width: 100%;\n          text-indent: 30px;\n          background: #F9FAFC;\n          border-bottom: 2px solid #D5E0ED;\n          border-radius: 4px 4px 0px 0px;\n        }\n        .unsplash-react input::placeholder {\n          opacity: 1\n          color: #8492A6;\n        }\n        .unspash-react-input:hover {\n          background: #F0F4F9;\n          border-bottom-color: #8492A6;\n        }        \n        .unspash-react-input:focus {\n          background: #EBF8FF;\n          border-bottom-color: #009AE7;\n        }\n        .unspash-react-input[data-error=\"true\"] {\n          background: #FFE8E8;\n          border-bottom-color: #D83818;\n        }\n\n        .unspash-react-search-icon{\n          position: absolute;\n          top: 8px;\n          left: 16px;\n          z-index: 1;\n          color: #54677B;\n        }\n        .unspash-react-search-icon svg {\n          color: inherit;\n        }\n\n        .unspash-react-no-results {\n          position: absolute;\n          width: 100%;\n          height: 100%;\n          display: flex;\n          justify-content: start;\n          align-items: center;\n          flex-direction: column;\n        }\n        .unspash-react-no-results-svg{\n          margin-top: 100px;\n        }\n\n        .unspash-react-no-results-label{\n          font-size: 16px;\n          font-weight: 700;\n          line-height: 24px;\n          text-align: center;\n          margin-top: 24px;\n        }\n        \n        .unspash-react-input[data-error=\"true\"] + .unspash-react-search-icon {\n          // color:  #D83818;\n        }\n\n        .unspash-react-input:focus + .unspash-react-search-icon {\n          // color: #009AE7;\n        }\n      "
     }
   });
-}
-
-SearchInputIcon.propTypes = {
-  isLoading: bool.isRequired,
-  hasError: bool.isRequired,
-  style: object$4
-};
-function SearchInputIcon(_ref5) {
-  var isLoading = _ref5.isLoading,
-      hasError = _ref5.hasError,
-      style = _ref5.style,
-      rest = objectWithoutProperties(_ref5, ["isLoading", "hasError", "style"]);
-
-  var searchColor = hasError ? "#D62828" : inputGray;
-  var mergedStyle = _extends({ marginRight: ".5em" }, style);
-  return React.createElement(
-    "div",
-    _extends({ className: "p-r d-f ai-c", style: mergedStyle }, rest),
-    isLoading ? React.createElement(Spinner, { size: "1em", color: searchColor }) : React.createElement(SearchIcon, { width: "1em", height: "1em", style: { color: searchColor } })
-  );
 }
 
 AbsolutelyCentered.propTypes = {
   width: number$3.isRequired,
   height: number$3.isRequired
 };
-function AbsolutelyCentered(_ref6) {
-  var width = _ref6.width,
-      height = _ref6.height,
-      rest = objectWithoutProperties(_ref6, ["width", "height"]);
+function AbsolutelyCentered(_ref5) {
+  var width = _ref5.width,
+      height = _ref5.height,
+      rest = objectWithoutProperties(_ref5, ["width", "height"]);
 
   return React.createElement("div", _extends({
     className: "p-a",
@@ -1402,11 +1409,11 @@ OverflowFadeLink.propTypes = {
   style: object$4.isRequired,
   wrapperClassName: string$9.isRequired
 };
-function OverflowFadeLink(_ref7) {
-  var wrapperClassName = _ref7.wrapperClassName,
-      _ref7$style = _ref7.style,
-      style = _ref7$style === undefined ? {} : _ref7$style,
-      rest = objectWithoutProperties(_ref7, ["wrapperClassName", "style"]);
+function OverflowFadeLink(_ref6) {
+  var wrapperClassName = _ref6.wrapperClassName,
+      _ref6$style = _ref6.style,
+      style = _ref6$style === undefined ? {} : _ref6$style,
+      rest = objectWithoutProperties(_ref6, ["wrapperClassName", "style"]);
 
   return React.createElement(
     "div",
@@ -1455,13 +1462,13 @@ Photo.propTypes = {
   highlightColor: string$9.isRequired,
   utmLink: func$6.isRequired
 };
-function Photo(_ref8) {
-  var photo = _ref8.photo,
-      loadingPhoto = _ref8.loadingPhoto,
-      selectedPhoto = _ref8.selectedPhoto,
-      onPhotoClick = _ref8.onPhotoClick,
-      highlightColor = _ref8.highlightColor,
-      utmLink = _ref8.utmLink;
+function Photo(_ref7) {
+  var photo = _ref7.photo,
+      loadingPhoto = _ref7.loadingPhoto,
+      selectedPhoto = _ref7.selectedPhoto,
+      onPhotoClick = _ref7.onPhotoClick,
+      highlightColor = _ref7.highlightColor,
+      utmLink = _ref7.utmLink;
 
   var loadingPhotoId = loadingPhoto && loadingPhoto.id;
   var selectedPhotoId = selectedPhoto && selectedPhoto.id;
