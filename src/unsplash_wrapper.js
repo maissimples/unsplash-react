@@ -1,20 +1,20 @@
-import { createApi } from "unsplash-js"
+import { createApi } from 'unsplash-js'
 
 class ChaosMonkey {
   constructor(shouldDoAnything) {
     if (shouldDoAnything) {
-      this.process = r => (Math.random() > 0.5 ? this.failResponse(r) : r)
+      this.process = (r) => (Math.random() > 0.5 ? this.failResponse(r) : r)
     } else {
-      this.process = r => r
+      this.process = (r) => r
     }
   }
 
   failResponse(_response) {
     const errors = [
-      [400, "bad request"],
-      [503, "gateway timeout"],
-      [500, "server error"],
-      [401, "not authorized"],
+      [400, 'bad request'],
+      [503, 'gateway timeout'],
+      [500, 'server error'],
+      [401, 'not authorized'],
     ]
     const error = errors[Math.round(Math.random() * (errors.length - 1))]
     return new Response(JSON.stringify({}), {
@@ -31,23 +31,37 @@ export default class UnsplashWrapper {
   }
 
   // eslint-disable-next-line max-params
-  listPhotos = (page, perPage, proxyUrl, orderBy = "popular") => {
-    const newProxyUrl = `${proxyUrl}?&orderBy=${orderBy}&page=${page}&per_page=${perPage}`
-    return fetch(newProxyUrl)
-      .then(resp => resp.json())
-      .then(resp => resp)
+  listPhotos = (page, perPage, proxyUrl, orderBy = 'popular') => {
+    if (proxyUrl) {
+      const newProxyUrl = `${proxyUrl}?&orderBy=${orderBy}&page=${page}&per_page=${perPage}`
+      return fetch(newProxyUrl)
+        .then((resp) => resp.json())
+        .then((resp) => resp)
+    }
+
+    return this.unsplash.photos
+      .list({ page, perPage, orderBy })
+      .then(this.processResponse)
+      .then(({ response }) => response.results)
   }
 
   // eslint-disable-next-line max-params
   searchPhotos = (query, page, perPage, customQueryParams = {}, proxyUrl) => {
-    let newProxyUrl = `${proxyUrl}/search?query=${query}&page=${page}&per_page=${perPage}`
-    Object.keys(customQueryParams).forEach(key => {
-      newProxyUrl += `&${key}=${customQueryParams[key]}`
-    })
+    if (proxyUrl) {
+      let newProxyUrl = `${proxyUrl}/search?query=${query}&page=${page}&per_page=${perPage}`
+      Object.keys(customQueryParams).forEach((key) => {
+        newProxyUrl += `&${key}=${customQueryParams[key]}`
+      })
 
-    return fetch(newProxyUrl)
-      .then(resp => resp.json())
-      .then(resp => resp)
+      return fetch(newProxyUrl)
+        .then((resp) => resp.json())
+        .then((resp) => resp)
+    }
+
+    return this.unsplash.search
+      .getPhotos({ query, page, perPage, ...customQueryParams })
+      .then(this.processResponse)
+      .then(({ response }) => response)
   }
 
   getPhoto = (id, { width, height } = {}) => {
@@ -58,15 +72,15 @@ export default class UnsplashWrapper {
   }
 
   downloadPhoto = (photo, proxyUrl) => {
-    const ixid = photo.links.download_location.split("ixid=")[1]
+    const ixid = photo.links.download_location.split('ixid=')[1]
     const newProxyUrl = `${proxyUrl}/download?id=${photo.id}&ixid=${ixid}`
 
     return fetch(newProxyUrl)
-      .then(resp => resp.json())
-      .then(response => response)
+      .then((resp) => resp.json())
+      .then((response) => response)
   }
 
-  processResponse = incomingResponse => {
+  processResponse = (incomingResponse) => {
     const response = Promise.resolve(
       this.__debug_chaosMonkey.process(incomingResponse)
     )
@@ -75,7 +89,7 @@ export default class UnsplashWrapper {
   }
 
   handleErrors(response) {
-    if (response.type !== "success") {
+    if (response.type !== 'success') {
       const error = Error(response.statusText)
       error.status = response.status
       throw error

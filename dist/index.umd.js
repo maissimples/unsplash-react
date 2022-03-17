@@ -1199,9 +1199,9 @@
 	  }
 
 	  createClass(ChaosMonkey, [{
-	    key: "failResponse",
+	    key: 'failResponse',
 	    value: function failResponse(_response) {
-	      var errors = [[400, "bad request"], [503, "gateway timeout"], [500, "server error"], [401, "not authorized"]];
+	      var errors = [[400, 'bad request'], [503, 'gateway timeout'], [500, 'server error'], [401, 'not authorized']];
 	      var error = errors[Math.round(Math.random() * (errors.length - 1))];
 	      return new Response(JSON.stringify({}), {
 	        status: error[0],
@@ -1223,13 +1223,20 @@
 	    classCallCheck(this, UnsplashWrapper);
 
 	    this.listPhotos = function (page, perPage, proxyUrl) {
-	      var orderBy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "popular";
+	      var orderBy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'popular';
 
-	      var newProxyUrl = proxyUrl + "?&orderBy=" + orderBy + "&page=" + page + "&per_page=" + perPage;
-	      return fetch(newProxyUrl).then(function (resp) {
-	        return resp.json();
-	      }).then(function (resp) {
-	        return resp;
+	      if (proxyUrl) {
+	        var newProxyUrl = proxyUrl + '?&orderBy=' + orderBy + '&page=' + page + '&per_page=' + perPage;
+	        return fetch(newProxyUrl).then(function (resp) {
+	          return resp.json();
+	        }).then(function (resp) {
+	          return resp;
+	        });
+	      }
+
+	      return _this2.unsplash.photos.list({ page: page, perPage: perPage, orderBy: orderBy }).then(_this2.processResponse).then(function (_ref2) {
+	        var response = _ref2.response;
+	        return response.results;
 	      });
 	    };
 
@@ -1237,32 +1244,39 @@
 	      var customQueryParams = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 	      var proxyUrl = arguments[4];
 
-	      var newProxyUrl = proxyUrl + "/search?query=" + query + "&page=" + page + "&per_page=" + perPage;
-	      Object.keys(customQueryParams).forEach(function (key) {
-	        newProxyUrl += "&" + key + "=" + customQueryParams[key];
-	      });
+	      if (proxyUrl) {
+	        var newProxyUrl = proxyUrl + '/search?query=' + query + '&page=' + page + '&per_page=' + perPage;
+	        Object.keys(customQueryParams).forEach(function (key) {
+	          newProxyUrl += '&' + key + '=' + customQueryParams[key];
+	        });
 
-	      return fetch(newProxyUrl).then(function (resp) {
-	        return resp.json();
-	      }).then(function (resp) {
-	        return resp;
-	      });
-	    };
+	        return fetch(newProxyUrl).then(function (resp) {
+	          return resp.json();
+	        }).then(function (resp) {
+	          return resp;
+	        });
+	      }
 
-	    this.getPhoto = function (id) {
-	      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-	          width = _ref2.width,
-	          height = _ref2.height;
-
-	      return _this2.unsplash.photos.get({ photoId: id, width: width, height: height }).then(_this2.processResponse).then(function (_ref3) {
+	      return _this2.unsplash.search.getPhotos(_extends$1({ query: query, page: page, perPage: perPage }, customQueryParams)).then(_this2.processResponse).then(function (_ref3) {
 	        var response = _ref3.response;
 	        return response;
 	      });
 	    };
 
+	    this.getPhoto = function (id) {
+	      var _ref4 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	          width = _ref4.width,
+	          height = _ref4.height;
+
+	      return _this2.unsplash.photos.get({ photoId: id, width: width, height: height }).then(_this2.processResponse).then(function (_ref5) {
+	        var response = _ref5.response;
+	        return response;
+	      });
+	    };
+
 	    this.downloadPhoto = function (photo, proxyUrl) {
-	      var ixid = photo.links.download_location.split("ixid=")[1];
-	      var newProxyUrl = proxyUrl + "/download?id=" + photo.id + "&ixid=" + ixid;
+	      var ixid = photo.links.download_location.split('ixid=')[1];
+	      var newProxyUrl = proxyUrl + '/download?id=' + photo.id + '&ixid=' + ixid;
 
 	      return fetch(newProxyUrl).then(function (resp) {
 	        return resp.json();
@@ -1288,9 +1302,9 @@
 
 
 	  createClass(UnsplashWrapper, [{
-	    key: "handleErrors",
+	    key: 'handleErrors',
 	    value: function handleErrors(response) {
-	      if (response.type !== "success") {
+	      if (response.type !== 'success') {
 	        var error = Error(response.statusText);
 	        error.status = response.status;
 	        throw error;
@@ -2839,6 +2853,7 @@
 
 	function noop() {}
 
+<<<<<<< HEAD
 	var inputNoAppearanceStyle = {
 	  border: "none",
 	  padding: 0,
@@ -2852,6 +2867,10 @@
 
 	var inputGray = "#AAA";
 	var inputDarkGray = "#555";
+=======
+	var inputGray = '#AAA';
+	var inputDarkGray = '#555';
+>>>>>>> ce4de99... Add conditional proxyUrl
 	var borderRadius = 3;
 
 	var UnsplashPicker = function (_React$Component) {
@@ -2892,8 +2911,8 @@
 	    _this.utmLink = function (url) {
 	      var applicationName = _this.props.applicationName;
 
-	      var utmParams = "utm_source=" + applicationName + "&utm_medium=referral";
-	      return url + "?" + utmParams;
+	      var utmParams = 'utm_source=' + applicationName + '&utm_medium=referral';
+	      return url + '?' + utmParams;
 	    };
 
 	    _this.doImmediateSearch = function () {
@@ -2949,7 +2968,7 @@
 	      var download = _this.state.unsplash.downloadPhoto(photo, _this.state.proxyUrl);
 
 	      var downloadPromise = preferredSize ? _this.state.unsplash.getPhoto(photo.id, preferredSize).then(function (r) {
-	        return r.urls.raw + "&w=" + preferredSize.width + "&h=" + preferredSize.height;
+	        return r.urls.raw + '&w=' + preferredSize.width + '&h=' + preferredSize.height;
 	      }) : download.then(function (r) {
 	        return r.url;
 	      });
@@ -3007,7 +3026,7 @@
 	  }
 
 	  createClass(UnsplashPicker, [{
-	    key: "componentDidMount",
+	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var unsplash = new UnsplashWrapper({
 	        accessKey: this.props.accessKey,
@@ -3019,10 +3038,10 @@
 
 	      this.recalculateSearchResultsWidth();
 
-	      window.addEventListener("resize", this.recalculateSearchResultsWidth);
+	      window.addEventListener('resize', this.recalculateSearchResultsWidth);
 	    }
 	  }, {
-	    key: "componentDidUpdate",
+	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate(_prevProps, prevState) {
 	      var _state = this.state,
 	          search = _state.search,
@@ -3038,17 +3057,17 @@
 	      }
 	    }
 	  }, {
-	    key: "componentWillUnmount",
+	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      window.removeEventListener("resize", this.recalculateSearchResultsWidth);
+	      window.removeEventListener('resize', this.recalculateSearchResultsWidth);
 	    }
 	  }, {
-	    key: "didFinishLoadingNewSearchResults",
+	    key: 'didFinishLoadingNewSearchResults',
 	    value: function didFinishLoadingNewSearchResults() {
 	      this.searchResults.scrollTop = 0;
 	    }
 	  }, {
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 
@@ -3076,6 +3095,7 @@
 	        ReactIntersectionObserver,
 	        {
 	          onIntersectionChange: this.recalculateSearchResultsWidth,
+<<<<<<< HEAD
 	          style: { flexDirection: "column" },
 	          className: "unsplash-react d-f h-f p-0"
 	        },
@@ -3123,59 +3143,98 @@
 	          }),
 	          react.createElement("input", {
 	            type: "text",
+=======
+	          style: _extends$1({}, unsplashReactRootStyles, { flexDirection: 'column' }),
+	          className: 'unsplash-react-root unsplash-react'
+	        },
+	        react.createElement(CSSStyles, null),
+	        react.createElement(
+	          'div',
+	          {
+	            className: 'd-f unsplash-react-wrapper',
+	            style: _extends$1({
+	              display: 'flex',
+	              alignItems: 'center'
+	            }, unsplashReactWrapperStyles),
+	            onClick: this.handleSearchWrapperClick
+	          },
+	          react.createElement('input', {
+	            type: 'text',
+	            'data-error': !!error,
+>>>>>>> ce4de99... Add conditional proxyUrl
 	            value: search,
 	            placeholder: this.state.placeholder,
 	            onChange: this.handleSearchChange,
+<<<<<<< HEAD
 	            style: inputNoAppearanceStyle,
 	            className: "f-1",
+=======
+	            style: _extends$1({}, unsplashReactInputStyles),
+	            className: 'f-1 unspash-react-input',
+>>>>>>> ce4de99... Add conditional proxyUrl
 	            ref: function ref(input) {
 	              return _this2.searchInput = input;
 	            }
 	          }),
+<<<<<<< HEAD
+=======
+	          react.createElement(
+	            'div',
+	            { className: 'unspash-react-search-icon' },
+	            isLoadingSearch ? react.createElement(Spinner, {
+	              size: '1em',
+	              style: _extends$1({}, unsplashReactSearchIconStyles)
+	            }) : react.createElement(SearchIcon, {
+	              width: '1em',
+	              height: '1em',
+	              style: _extends$1({}, unsplashReactSearchIconStyles)
+	            })
+	          ),
+>>>>>>> ce4de99... Add conditional proxyUrl
 	          totalPhotosCount !== null && react.createElement(
-	            "span",
+	            'span',
 	            { style: { color: inputDarkGray } },
 	            totalPhotosCount,
-	            " results"
+	            ' results'
 	          )
 	        ),
 	        react.createElement(
-	          "div",
+	          'div',
 	          {
-	            className: "p-r f-1 border-radius",
-	            style: { marginTop: ".5em", overflow: "hidden" }
+	            className: 'p-r f-1 border-radius',
+	            style: { marginTop: '.5em', overflow: 'hidden' }
 	          },
 	          react.createElement(
-	            "div",
+	            'div',
 	            {
-	              className: "h-f unsplash-react__image-grid",
+	              className: 'h-f unsplash-react__image-grid',
 	              style: {
-	                overflowY: "scroll",
-	                "--imageWidth": searchResultWidth + "px",
-	                "--imageHeight": searchResultHeight + "px"
+	                overflowY: 'scroll',
+	                '--imageWidth': searchResultWidth + 'px',
+	                '--imageHeight': searchResultHeight + 'px'
 	              },
 	              ref: function ref(element) {
 	                return _this2.searchResults = element;
 	              }
 	            },
 	            error ? react.createElement(
-	              "div",
+	              'div',
 	              {
 	                style: {
-	                  textAlign: "center",
-	                  marginTop: "3em",
-	                  padding: "0 1em",
+	                  textAlign: 'center',
+	                  marginTop: '3em',
+	                  padding: '0 1em',
 	                  fontSize: 13
 	                }
 	              },
 	              react.createElement(ErrorImage, null),
 	              react.createElement(
-	                "p",
+	                'p',
 	                null,
-	                "We're having trouble communicating with Unsplash right now. Please try again."
+	                'We\'re having trouble communicating with Unsplash right now. Please try again.'
 	              ),
 	              react.createElement(
-	                "p",
+	                'p',
 	                { style: { color: inputGray } },
 	                error
 	              )
@@ -3192,28 +3251,28 @@
 	            }), this.searchResults && react.createElement(
 	              ReactIntersectionObserver,
 	              {
-	                key: "intersectionObserver",
+	                key: 'intersectionObserver',
 	                root: this.searchResults,
 	                onIntersectionChange: this.handleSearchResultsBottomIntersectionChange,
 	                style: {
-	                  width: "100%",
-	                  textAlign: "center",
-	                  marginTop: this.hasMoreResults ? "2em" : ".5em",
+	                  width: '100%',
+	                  textAlign: 'center',
+	                  marginTop: this.hasMoreResults ? '2em' : '.5em',
 	                  height: this.hasMoreResults ? 50 : 1
 	                }
 	              },
-	              this.hasMoreResults && react.createElement(Spinner, { size: "40px" })
+	              this.hasMoreResults && react.createElement(Spinner, { size: '40px' })
 	            )]
 	          ),
-	          react.createElement("div", {
-	            className: "p-a",
+	          react.createElement('div', {
+	            className: 'p-a',
 	            style: {
 	              bottom: -1,
 	              left: 0,
 	              right: 0,
 	              height: 1,
-	              boxShadow: isAtBottomOfSearchResults && !this.hasMoreResults || error ? "0 0 0 0 transparent" : "0 0 10px 5px rgba(0, 0, 0, .2)",
-	              transition: "box-shadow .3s",
+	              boxShadow: isAtBottomOfSearchResults && !this.hasMoreResults || error ? '0 0 0 0 transparent' : '0 0 10px 5px rgba(0, 0, 0, .2)',
+	              transition: 'box-shadow .3s',
 	              zIndex: 2
 	            }
 	          })
@@ -3226,22 +3285,22 @@
 	      );
 	    }
 	  }, {
-	    key: "shouldShowDefault",
+	    key: 'shouldShowDefault',
 	    get: function get() {
-	      return this.state.search === "";
+	      return this.state.search === '';
 	    }
 	  }, {
-	    key: "resultsPerPage",
+	    key: 'resultsPerPage',
 	    get: function get() {
 	      return this.props.columns * 4;
 	    }
 	  }, {
-	    key: "totalResults",
+	    key: 'totalResults',
 	    get: function get() {
 	      return this.shouldShowDefault ? Infinity : this.state.totalPhotosCount;
 	    }
 	  }, {
-	    key: "hasMoreResults",
+	    key: 'hasMoreResults',
 	    get: function get() {
 	      return this.totalResults > this.resultsPerPage * this.state.page;
 	    }
@@ -3268,12 +3327,12 @@
 	  __debug_chaosMonkey: bool
 	};
 	UnsplashPicker.defaultProps = {
-	  accessKey: "",
+	  accessKey: '',
 	  customQueryParams: {},
-	  placeholder: "Search Unsplash photos by topics or colors",
+	  placeholder: 'Search Unsplash photos by topics or colors',
 	  columns: 3,
-	  defaultSearch: "",
-	  highlightColor: "#00adf0",
+	  defaultSearch: '',
+	  highlightColor: '#00adf0',
 	  onFinishedUploading: noop,
 	  photoRatio: 1.5,
 	  preferredSize: null,
@@ -3282,9 +3341,13 @@
 	};
 
 	function CSSStyles() {
-	  return react.createElement("style", {
+	  return react.createElement('style', {
 	    dangerouslySetInnerHTML: {
+<<<<<<< HEAD
 	      __html: "\n        .unsplash-react, .unsplash-react * { box-sizing: border-box }\n        .unsplash-react input::placeholder {\n          color: " + inputGray + ";\n          opacity: 1;\n        }\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0; }\n          to   { opacity: 1; }\n        }\n\n        .unsplash-react .p-r { position: relative; }\n        .unsplash-react .p-a { position: absolute; }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0; }\n\n        .unsplash-react .f-1 { flex: 1; }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex; }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100%; }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center; }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: " + borderRadius + "px; }\n\n        .unsplash-react .unsplash-react__image-grid {\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));\n          gap: 12px;\n        }\n\n        .unsplash-react__image {\n          display: block;\n          width: 100%;\n          height: var(--imageHeight);\n          object-fit: cover;\n        }\n      "
+=======
+	      __html: '\n        .unsplash-react, .unsplash-react * { box-sizing: border-box; }\n\n        .unsplash-react-wrapper{\n          height: 30px,\n          line-height: 22px,\n          font-style: normal,\n          font-weight: normal,\n          font-size: 14px,\n          position: relative;\n          display: flex;\n          width: 100%;\n          position: relative;\n        }\n       \n        .unspash-react-input {\n          padding: 8px 16px;\n          outline: none;\n          border: none;\n          height: 100%;\n          outline: none;\n          width: 100%;\n          text-indent: 30px;\n          background: #F9FAFC;\n          border-bottom: 2px solid #D5E0ED;\n          border-radius: 4px 4px 0px 0px;\n        }\n        .unsplash-react input::placeholder {\n          opacity: 1\n          color: #8492A6;\n        }\n        .unspash-react-input:hover {\n          background: #F0F4F9;\n          border-bottom-color: #8492A6;\n        }        \n        .unspash-react-input:focus {\n          background: #EBF8FF;\n          border-bottom-color: #009AE7;\n        }\n        .unspash-react-input[data-error="true"] {\n          background: #FFE8E8;\n          border-bottom-color: #D83818;\n        }\n\n        .unspash-react-search-icon{\n          position: absolute;\n          top: 8px;\n          left: 16px;\n          z-index: 1;\n          color: #54677B;\n        }\n        .unspash-react-search-icon svg {\n          color: inherit;\n        }\n        \n        .unspash-react-input[data-error="true"] + .unspash-react-search-icon {\n          // color:  #D83818;\n        }\n\n        .unspash-react-input:focus + .unspash-react-search-icon {\n          // color: #009AE7;\n        }\n\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0 }\n          to   { opacity: 1 }\n        }\n\n        .unsplash-react .p-r { position: relative }\n        .unsplash-react .p-a { position: absolute }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0 }\n\n        .unsplash-react .f-1 { flex: 1 }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100% }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: ' + borderRadius + 'px }\n\n        .unsplash-react .unsplash-react__image-grid {\n          display: grid\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr))\n          gap: 12px\n        }\n\n        .unsplash-react__image {\n          display: block\n          width: 100%\n          height: var(--imageHeight)\n          object-fit: cover\n        }\n      '
+>>>>>>> ce4de99... Add conditional proxyUrl
 	    }
 	  });
 	}
@@ -3313,19 +3376,26 @@
 	  width: number$3.isRequired,
 	  height: number$3.isRequired
 	};
+<<<<<<< HEAD
 	function AbsolutelyCentered(_ref6) {
 	  var width = _ref6.width,
 	      height = _ref6.height,
 	      rest = objectWithoutProperties(_ref6, ["width", "height"]);
+=======
+	function AbsolutelyCentered(_ref5) {
+	  var width = _ref5.width,
+	      height = _ref5.height,
+	      rest = objectWithoutProperties(_ref5, ['width', 'height']);
+>>>>>>> ce4de99... Add conditional proxyUrl
 
-	  return react.createElement("div", _extends$1({
-	    className: "p-a",
+	  return react.createElement('div', _extends$1({
+	    className: 'p-a',
 	    style: {
 	      width: width,
 	      height: height,
-	      top: "50%",
-	      left: "50%",
-	      margin: "-" + height / 2 + "px 0 0 -" + width / 2 + "px"
+	      top: '50%',
+	      left: '50%',
+	      margin: '-' + height / 2 + 'px 0 0 -' + width / 2 + 'px'
 	    }
 	  }, rest));
 	}
@@ -3335,39 +3405,47 @@
 	  style: object$4.isRequired,
 	  wrapperClassName: string$9.isRequired
 	};
+<<<<<<< HEAD
 	function OverflowFadeLink(_ref7) {
 	  var wrapperClassName = _ref7.wrapperClassName,
 	      _ref7$style = _ref7.style,
 	      style = _ref7$style === undefined ? {} : _ref7$style,
 	      rest = objectWithoutProperties(_ref7, ["wrapperClassName", "style"]);
+=======
+	function OverflowFadeLink(_ref6) {
+	  var wrapperClassName = _ref6.wrapperClassName,
+	      _ref6$style = _ref6.style,
+	      style = _ref6$style === undefined ? {} : _ref6$style,
+	      rest = objectWithoutProperties(_ref6, ['wrapperClassName', 'style']);
+>>>>>>> ce4de99... Add conditional proxyUrl
 
 	  return react.createElement(
-	    "div",
+	    'div',
 	    {
-	      className: "p-r " + wrapperClassName,
+	      className: 'p-r ' + wrapperClassName,
 	      style: {
-	        display: "block",
-	        overflow: "hidden",
-	        maxWidth: "100%"
+	        display: 'block',
+	        overflow: 'hidden',
+	        maxWidth: '100%'
 	      }
 	    },
-	    react.createElement("a", _extends$1({
+	    react.createElement('a', _extends$1({
 	      style: _extends$1({}, style, {
-	        display: "block",
-	        whiteSpace: "nowrap",
-	        maxWidth: "100%",
-	        textDecoration: "underline",
+	        display: 'block',
+	        whiteSpace: 'nowrap',
+	        maxWidth: '100%',
+	        textDecoration: 'underline',
 	        fontSize: 13
 	      })
 	    }, rest)),
-	    react.createElement("div", {
-	      className: "p-a",
+	    react.createElement('div', {
+	      className: 'p-a',
 	      style: {
 	        right: -2,
 	        top: 0,
 	        bottom: 0,
 	        width: 1,
-	        boxShadow: "0 0 10px 10px white",
+	        boxShadow: '0 0 10px 10px white',
 	        zIndex: 1
 	      }
 	    })
@@ -3405,17 +3483,17 @@
 	  };
 
 	  return react.createElement(
-	    "div",
+	    'div',
 	    null,
 	    react.createElement(
-	      "div",
+	      'div',
 	      {
-	        className: "p-r border-radius",
+	        className: 'p-r border-radius',
 	        style: {
-	          overflow: "hidden",
-	          transition: "box-shadow .3s",
-	          cursor: "pointer",
-	          width: "100%"
+	          overflow: 'hidden',
+	          transition: 'box-shadow .3s',
+	          cursor: 'pointer',
+	          width: '100%'
 	        },
 	        onClick: onClick
 	      },
@@ -3423,58 +3501,58 @@
 	        src: photo.urls.small,
 	        style: {
 	          borderWidth: borderWidth,
-	          borderStyle: "solid",
-	          borderColor: isSelectedAndLoaded ? highlightColor : "transparent",
+	          borderStyle: 'solid',
+	          borderColor: isSelectedAndLoaded ? highlightColor : 'transparent',
 	          borderRadius: borderRadius + borderWidth,
-	          transition: "border .3s"
+	          transition: 'border .3s'
 	        }
 	      }),
 	      loadingPhotoId === photo.id && react.createElement(
-	        "div",
+	        'div',
 	        {
-	          className: "p-a",
+	          className: 'p-a',
 	          style: {
 	            left: 0,
 	            top: 0,
 	            right: 0,
 	            bottom: 0,
-	            backgroundColor: "rgba(255,255,255,0.5)",
-	            animation: "unsplash-react-fadein .1s"
+	            backgroundColor: 'rgba(255,255,255,0.5)',
+	            animation: 'unsplash-react-fadein .1s'
 	          }
 	        },
 	        react.createElement(
 	          AbsolutelyCentered,
 	          { height: 40, width: 40 },
-	          react.createElement(Spinner, { size: "40px", color: "rgba(255,255,255,0.8)" })
+	          react.createElement(Spinner, { size: '40px', color: 'rgba(255,255,255,0.8)' })
 	        )
 	      )
 	    ),
 	    react.createElement(
-	      "div",
+	      'div',
 	      {
-	        className: "d-f",
-	        style: { padding: ".15em " + borderWidth + "px 0 " + borderWidth + "px" }
+	        className: 'd-f',
+	        style: { padding: '.15em ' + borderWidth + 'px 0 ' + borderWidth + 'px' }
 	      },
 	      react.createElement(
 	        OverflowFadeLink,
 	        {
 	          href: utmLink(photo.user.links.html),
-	          target: "_blank",
+	          target: '_blank',
 	          style: { color: inputGray },
-	          wrapperClassName: "f-1"
+	          wrapperClassName: 'f-1'
 	        },
 	        photo.user.name
 	      ),
 	      react.createElement(
-	        "a",
+	        'a',
 	        {
 	          href: utmLink(photo.links.html),
-	          target: "_blank",
+	          target: '_blank',
 	          style: {
 	            color: inputGray,
-	            textDecoration: "none",
-	            lineHeight: "10px",
-	            marginLeft: "1em",
+	            textDecoration: 'none',
+	            lineHeight: '10px',
+	            marginLeft: '1em',
 	            padding: 2,
 	            borderRadius: borderRadius - 1
 	          }
