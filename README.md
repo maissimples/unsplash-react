@@ -15,18 +15,33 @@ $ yarn add unsplash-react
 Here's the most basic example:
 
 ```jsx
-import UnsplashReact, { Base64Uploader, withDefaultProps } from "unsplash-react"
+import UnsplashReact, { InsertIntoApplicationUploader } from 'unsplash-react'
 
-const MY_ACCESS_KEY = "UNSPLASH_KEY_FROM_UNSPLASH"
+import './App.css'
 
-export default function UnsplashUploader() {
+function App() {
   return (
-    <UnsplashReact
-      accessKey={MY_ACCESS_KEY}
-      Uploader={withDefaultProps(Base64Uploader, { name: "event[logo]" })}
-    />
+    <div className='App'>
+      <div className='container'>
+        <UnsplashReact
+          accessKey='my-access-key'
+          Uploader={InsertIntoApplicationUploader}
+          onFinishedUploading={(v) => console.log(v)}
+          applicationName={'my-app-name'}
+          columns={4}
+          searchResults={false}
+          placeholder='Buscar'
+          blankStateLabel='Sem resultados'
+          defaultErrorMessage='Ops... não foi possível carregar a imagem'
+          displayLoadingIcon={false}
+          // proxyUrl={'http://localhost:3000/api/unsplash'}
+        />
+      </div>
+    </div>
   )
 }
+
+export default App
 ```
 
 `unsplash-react` has two core steps
@@ -56,27 +71,31 @@ $ open http://localhost:10001/
 
 ## `<UnsplashReact />` Props
 
-name                  | type                       | required | default   | description
---------------------- | -------------------------- | -------- | --------- | -----------
-`accessKey`           | `string`                   | yes      | n/a       | Access key from the [Unsplash developer site](https://unsplash.com/oauth/applications)
-`applicationName`     | `string`                   | yes      | n/a       | Application name for [UTM tracking](https://medium.com/unsplash/unsplash-api-guidelines-28e0216e6daa)
-`columns`             | `number`                   | no       | 3         | Number of columns to show in search results
-`defaultSearch`       | `string`                   | no       | `""`      | A default search string. If not set, `react-unsplash` will show popular photos from Unsplash
-`highlightColor`      | `string`                   | no       | `#00adf0` | The highlight color for images when they have been selected and downloaded
-`onFinishedUploading` | `func`                     | no       | no-op     | A callback, for when the photo has finished uploading. Called with the download response from the uploader (eg, the `response` with the `blob()`)
-`photoRatio`          | `number`                   | no       | `3 / 2`   | The `width/height` ratio for displaying search results
-`preferredSize`       | `shape({ width, height })` | no       | n/a       | Your application's preferred width and height for downloaded images. If not set, `react-unsplash` will download full size images
-`Uploader`            | Component                  | no       | `Base64Uploader` | The component used to upload photos from Unsplash to your application.
-`placeholder`         | `string`                   | no        | `Search Unsplash photos by topics or colors` | Update the input's placeholder
-`customQueryParam`    | `object`                   | no        | n/a   | Add custom query params to search request 
+| name                  | type                       | required | default                                                                         | description                                                                                                                                       |
+| --------------------- | -------------------------- | -------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `accessKey`           | `string`                   | yes      | n/a                                                                             | Access key from the [Unsplash developer site](https://unsplash.com/oauth/applications)                                                            |
+| `applicationName`     | `string`                   | yes      | n/a                                                                             | Application name for [UTM tracking](https://medium.com/unsplash/unsplash-api-guidelines-28e0216e6daa)                                             |
+| `columns`             | `number`                   | no       | 3                                                                               | Number of columns to show in search results                                                                                                       |
+| `defaultSearch`       | `string`                   | no       | `""`                                                                            | A default search string. If not set, `react-unsplash` will show popular photos from Unsplash                                                      |
+| `highlightColor`      | `string`                   | no       | `#00adf0`                                                                       | The highlight color for images when they have been selected and downloaded                                                                        |
+| `onFinishedUploading` | `func`                     | no       | no-op                                                                           | A callback, for when the photo has finished uploading. Called with the download response from the uploader (eg, the `response` with the `blob()`) |
+| `photoRatio`          | `number`                   | no       | `3 / 2`                                                                         | The `width/height` ratio for displaying search results                                                                                            |
+| `preferredSize`       | `shape({ width, height })` | no       | n/a                                                                             | Your application's preferred width and height for downloaded images. If not set, `react-unsplash` will download full size images                  |
+| `Uploader`            | Component                  | no       | `Base64Uploader`                                                                | The component used to upload photos from Unsplash to your application.                                                                            |
+| `placeholder`         | `string`                   | no       | `Search Unsplash photos by topics or colors`                                    | Update the input's placeholder                                                                                                                    |
+| `customQueryParam`    | `object`                   | no       | n/a                                                                             | Add custom query params to search request                                                                                                         |
+| `blankStateLabel`     | `string`                   | no       | `No photos found`                                                               | Displayed when no photos are found                                                                                                                |
+| `defaultErrorMessage` | `string`                   | no       | `We're having trouble communicating with Unsplash right now. Please try again.` | Displayed when an error occurs                                                                                                                    |
+| `proxyUrl`            | `string`                   | no       | `https://api.unsplash.com/`                                                     | Proxy URL for Unsplash API                                                                                                                        |
+| `displayLoadingIcon`  | `boolean`                  | no       | `true`                                                                          | Display loading icon when searching                                                                                                               |
 
 ## `<Uploader />` Props
 
-name | type | required | default | description
---- | --- | --- | --- | ----
-`unsplashPhoto` | Unsplash API object | yes | n/a | The photo object from the Unsplash API
-`downloadPhoto` | `(UnsplashPhoto) => Promise<Response>` | yes | n/a | Downloads the photo from Unsplash. If `preferredSize` is set, the returned `Response` is a request to download the preferred size. Otherwise, it is a request to download the full size image
-`onFinishedUploading` | `func` | yes | n/a | This function must be called when the Uploader has finished uploading the photo.
+| name                  | type                                   | required | default | description                                                                                                                                                                                   |
+| --------------------- | -------------------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unsplashPhoto`       | Unsplash API object                    | yes      | n/a     | The photo object from the Unsplash API                                                                                                                                                        |
+| `downloadPhoto`       | `(UnsplashPhoto) => Promise<Response>` | yes      | n/a     | Downloads the photo from Unsplash. If `preferredSize` is set, the returned `Response` is a request to download the preferred size. Otherwise, it is a request to download the full size image |
+| `onFinishedUploading` | `func`                                 | yes      | n/a     | This function must be called when the Uploader has finished uploading the photo.                                                                                                              |
 
 ## Built-in Uploaders
 
