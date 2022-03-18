@@ -27,6 +27,7 @@ export default class UnsplashPicker extends React.Component {
     proxyUrl: string,
     customQueryParams: object,
     placeholder: string,
+    defaultErrorMessage: string,
     blankStateLabel: string,
     accessKey: string,
     applicationName: string.isRequired,
@@ -48,6 +49,8 @@ export default class UnsplashPicker extends React.Component {
     customQueryParams: {},
     placeholder: "Search Unsplash photos by topics or colors",
     blankStateLabel: "No photos found",
+    defaultErrorMessage:
+      " We're having trouble communicating with Unsplash right now. Please try again.",
     columns: 3,
     defaultSearch: "",
     highlightColor: "#00adf0",
@@ -265,6 +268,7 @@ export default class UnsplashPicker extends React.Component {
       highlightColor,
       placeholder,
       blankStateLabel,
+      defaultErrorMessage,
     } = this.props
 
     const {
@@ -348,11 +352,7 @@ export default class UnsplashPicker extends React.Component {
                 }}
               >
                 <ErrorImage />
-                <p>
-                  We're having trouble communicating with Unsplash right now.
-                  Please try again.
-                </p>
-                <p style={{ color: inputGray }}>{error}</p>
+                <p>{defaultErrorMessage}</p>
               </div>
             ) : (
               [
