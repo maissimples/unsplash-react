@@ -28,6 +28,7 @@ export default class UnsplashPicker extends React.Component {
     customQueryParams: object,
     placeholder: string,
     defaultErrorMessage: string,
+    displayLoadingIcon: bool,
     blankStateLabel: string,
     accessKey: string,
     applicationName: string.isRequired,
@@ -45,12 +46,13 @@ export default class UnsplashPicker extends React.Component {
   }
 
   static defaultProps = {
+    displayLoadingIcon: true,
     accessKey: "",
     customQueryParams: {},
     placeholder: "Search Unsplash photos by topics or colors",
     blankStateLabel: "No photos found",
     defaultErrorMessage:
-      " We're having trouble communicating with Unsplash right now. Please try again.",
+      "We're having trouble communicating with Unsplash right now. Please try again.",
     columns: 3,
     defaultSearch: "",
     highlightColor: "#00adf0",
@@ -269,6 +271,7 @@ export default class UnsplashPicker extends React.Component {
       placeholder,
       blankStateLabel,
       defaultErrorMessage,
+      displayLoadingIcon,
     } = this.props
 
     const {
@@ -315,7 +318,7 @@ export default class UnsplashPicker extends React.Component {
           />
 
           <div className="unspash-react-search-icon">
-            {isLoadingSearch ? (
+            {displayLoadingIcon && isLoadingSearch ? (
               <Spinner size="1em" />
             ) : (
               <SearchIcon width="1em" height="1em" />
@@ -571,8 +574,13 @@ function CSSStyles() {
           color: #54677B;
         }
         .unspash-react-search-icon svg {
-          color: inherit;
+          color: #54677B;
         }
+
+        .unspash-react-search-icon svg circle{
+          stroke: #54677B;
+        }
+
 
         .unspash-react-no-results {
           position: absolute;

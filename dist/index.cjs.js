@@ -1156,7 +1156,9 @@ var UnsplashPicker = function (_React$Component) {
           photoRatio = _props.photoRatio,
           highlightColor = _props.highlightColor,
           placeholder = _props.placeholder,
-          blankStateLabel = _props.blankStateLabel;
+          blankStateLabel = _props.blankStateLabel,
+          defaultErrorMessage = _props.defaultErrorMessage,
+          displayLoadingIcon = _props.displayLoadingIcon;
       var _state2 = this.state,
           photos = _state2.photos,
           search = _state2.search,
@@ -1204,7 +1206,7 @@ var UnsplashPicker = function (_React$Component) {
           React.createElement(
             "div",
             { className: "unspash-react-search-icon" },
-            isLoadingSearch ? React.createElement(Spinner, { size: "1em" }) : React.createElement(SearchIcon, { width: "1em", height: "1em" })
+            displayLoadingIcon && isLoadingSearch ? React.createElement(Spinner, { size: "1em" }) : React.createElement(SearchIcon, { width: "1em", height: "1em" })
           )
         ),
         React.createElement(
@@ -1240,12 +1242,7 @@ var UnsplashPicker = function (_React$Component) {
               React.createElement(
                 "p",
                 null,
-                "We're having trouble communicating with Unsplash right now. Please try again."
-              ),
-              React.createElement(
-                "p",
-                { style: { color: inputGray } },
-                error
+                defaultErrorMessage
               )
             ) : [photos.map(function (photo) {
               return React.createElement(Photo, {
@@ -1345,6 +1342,8 @@ UnsplashPicker.propTypes = {
   proxyUrl: string$9,
   customQueryParams: object$4,
   placeholder: string$9,
+  defaultErrorMessage: string$9,
+  displayLoadingIcon: bool,
   blankStateLabel: string$9,
   accessKey: string$9,
   applicationName: string$9.isRequired,
@@ -1361,10 +1360,12 @@ UnsplashPicker.propTypes = {
   __debug_chaosMonkey: bool
 };
 UnsplashPicker.defaultProps = {
+  displayLoadingIcon: true,
   accessKey: "",
   customQueryParams: {},
   placeholder: "Search Unsplash photos by topics or colors",
   blankStateLabel: "No photos found",
+  defaultErrorMessage: " We're having trouble communicating with Unsplash right now. Please try again.",
   columns: 3,
   defaultSearch: "",
   highlightColor: "#00adf0",
@@ -1378,7 +1379,7 @@ UnsplashPicker.defaultProps = {
 function CSSStyles() {
   return React.createElement("style", {
     dangerouslySetInnerHTML: {
-      __html: "\n        .unsplash-react, .unsplash-react * { \n          box-sizing: border-box;\n          font-family: inherit;\n        }\n        .unsplash-react input::placeholder {\n          color: " + inputGray + ";\n          opacity: 1;\n        }\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0; }\n          to   { opacity: 1; }\n        }\n\n        .unsplash-react .p-r { position: relative; }\n        .unsplash-react .p-a { position: absolute; }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0; }\n\n        .unsplash-react .f-1 { flex: 1; }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex; }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100%; }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center; }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: " + borderRadius + "px; }\n\n        .unspash-react-image-grid{\n          position: relative;\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));\n          gap: 12px;\n          padding: 8px;\n          padding-left: 16px;\n          overflow-y: auto;\n          overflow-x: hidden;\n          scrollbar-color: #8492A6 transparent;\n        }\n\n        .unspash-react-image-grid::-webkit-scrollbar {\n          width: 8px;\n          height: 8px;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-thumb {\n          border-radius: 8px;\n          background-clip: padding-box;\n          background-color: #8492A6;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-button {\n          width: 0;\n          height: 0;\n          display: none;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-corner {\n          background-color: transparent;\n        }\n\n        .unsplash-react__image {\n          display: block;\n          width: 100%;\n          height: var(--imageHeight);\n          object-fit: cover;\n        }\n\n        .unsplash-react-wrapper{\n          height: 30px,\n          line-height: 22px,\n          font-style: normal,\n          font-weight: normal,\n          font-size: 14px,\n          position: relative;\n          display: flex;\n          width: 100%;\n          position: relative;\n        }\n       \n        .unspash-react-input {\n          padding: 8px 16px;\n          outline: none;\n          border: none;\n          height: 100%;\n          outline: none;\n          width: 100%;\n          text-indent: 30px;\n          background: #F9FAFC;\n          border-bottom: 2px solid #D5E0ED;\n          border-radius: 4px 4px 0px 0px;\n        }\n        .unsplash-react input::placeholder {\n          opacity: 1\n          color: #8492A6;\n        }\n        .unspash-react-input:hover {\n          background: #F0F4F9;\n          border-bottom-color: #8492A6;\n        }        \n        .unspash-react-input:focus {\n          background: #EBF8FF;\n          border-bottom-color: #009AE7;\n        }\n        .unspash-react-input[data-error=\"true\"] {\n          background: #FFE8E8;\n          border-bottom-color: #D83818;\n        }\n\n        .unspash-react-search-icon{\n          position: absolute;\n          top: 8px;\n          left: 16px;\n          z-index: 1;\n          color: #54677B;\n        }\n        .unspash-react-search-icon svg {\n          color: inherit;\n        }\n\n        .unspash-react-no-results {\n          position: absolute;\n          width: 100%;\n          height: 100%;\n          display: flex;\n          justify-content: start;\n          align-items: center;\n          flex-direction: column;\n        }\n        .unspash-react-no-results-svg{\n          margin-top: 100px;\n        }\n\n        .unspash-react-no-results-label{\n          font-size: 16px;\n          font-weight: 700;\n          line-height: 24px;\n          text-align: center;\n          margin-top: 24px;\n        }\n        \n        .unspash-react-input[data-error=\"true\"] + .unspash-react-search-icon {\n          // color:  #D83818;\n        }\n\n        .unspash-react-input:focus + .unspash-react-search-icon {\n          // color: #009AE7;\n        }\n      "
+      __html: "\n        .unsplash-react, .unsplash-react * { \n          box-sizing: border-box;\n          font-family: inherit;\n        }\n        .unsplash-react input::placeholder {\n          color: " + inputGray + ";\n          opacity: 1;\n        }\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0; }\n          to   { opacity: 1; }\n        }\n\n        .unsplash-react .p-r { position: relative; }\n        .unsplash-react .p-a { position: absolute; }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0; }\n\n        .unsplash-react .f-1 { flex: 1; }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex; }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100%; }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center; }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: " + borderRadius + "px; }\n\n        .unspash-react-image-grid{\n          position: relative;\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));\n          gap: 12px;\n          padding: 8px;\n          padding-left: 16px;\n          overflow-y: auto;\n          overflow-x: hidden;\n          scrollbar-color: #8492A6 transparent;\n        }\n\n        .unspash-react-image-grid::-webkit-scrollbar {\n          width: 8px;\n          height: 8px;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-thumb {\n          border-radius: 8px;\n          background-clip: padding-box;\n          background-color: #8492A6;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-button {\n          width: 0;\n          height: 0;\n          display: none;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-corner {\n          background-color: transparent;\n        }\n\n        .unsplash-react__image {\n          display: block;\n          width: 100%;\n          height: var(--imageHeight);\n          object-fit: cover;\n        }\n\n        .unsplash-react-wrapper{\n          height: 30px,\n          line-height: 22px,\n          font-style: normal,\n          font-weight: normal,\n          font-size: 14px,\n          position: relative;\n          display: flex;\n          width: 100%;\n          position: relative;\n        }\n       \n        .unspash-react-input {\n          padding: 8px 16px;\n          outline: none;\n          border: none;\n          height: 100%;\n          outline: none;\n          width: 100%;\n          text-indent: 30px;\n          background: #F9FAFC;\n          border-bottom: 2px solid #D5E0ED;\n          border-radius: 4px 4px 0px 0px;\n        }\n        .unsplash-react input::placeholder {\n          opacity: 1\n          color: #8492A6;\n        }\n        .unspash-react-input:hover {\n          background: #F0F4F9;\n          border-bottom-color: #8492A6;\n        }        \n        .unspash-react-input:focus {\n          background: #EBF8FF;\n          border-bottom-color: #009AE7;\n        }\n        .unspash-react-input[data-error=\"true\"] {\n          background: #FFE8E8;\n          border-bottom-color: #D83818;\n        }\n\n        .unspash-react-search-icon{\n          position: absolute;\n          top: 8px;\n          left: 16px;\n          z-index: 1;\n          color: #54677B;\n        }\n        .unspash-react-search-icon svg {\n          color: #54677B;\n        }\n\n        .unspash-react-search-icon svg circle{\n          stroke: #54677B;\n        }\n\n\n        .unspash-react-no-results {\n          position: absolute;\n          width: 100%;\n          height: 100%;\n          display: flex;\n          justify-content: start;\n          align-items: center;\n          flex-direction: column;\n        }\n        .unspash-react-no-results-svg{\n          margin-top: 100px;\n        }\n\n        .unspash-react-no-results-label{\n          font-size: 16px;\n          font-weight: 700;\n          line-height: 24px;\n          text-align: center;\n          margin-top: 24px;\n        }\n        \n        .unspash-react-input[data-error=\"true\"] + .unspash-react-search-icon {\n          // color:  #D83818;\n        }\n\n        .unspash-react-input:focus + .unspash-react-search-icon {\n          // color: #009AE7;\n        }\n      "
     }
   });
 }
