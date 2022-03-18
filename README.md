@@ -30,9 +30,9 @@ function App() {
           applicationName={'my-app-name'}
           columns={4}
           searchResults={false}
-          placeholder='Buscar'
-          blankStateLabel='Sem resultados'
-          defaultErrorMessage='Ops... não foi possível carregar a imagem'
+          blankStateLabel="Sem resultados"
+          defaultErrorTitle="Falha ao carregar"
+          defaultErrorMessage="Não é possível conectar com o Unsplash no momento"
           displayLoadingIcon={false}
           // proxyUrl={'http://localhost:3000/api/unsplash'}
         />
@@ -85,6 +85,7 @@ $ open http://localhost:10001/
 | `placeholder`         | `string`                   | no       | `Search Unsplash photos by topics or colors`                                    | Update the input's placeholder                                                                                                                    |
 | `customQueryParam`    | `object`                   | no       | n/a                                                                             | Add custom query params to search request                                                                                                         |
 | `blankStateLabel`     | `string`                   | no       | `No photos found`                                                               | Displayed when no photos are found                                                                                                                |
+| `defaultErrorTitle`   | `string`                   | no       | `Error`                                                                         | Displayed when an error occurs                                                                                                                    |
 | `defaultErrorMessage` | `string`                   | no       | `We're having trouble communicating with Unsplash right now. Please try again.` | Displayed when an error occurs                                                                                                                    |
 | `proxyUrl`            | `string`                   | no       | `https://api.unsplash.com/`                                                     | Proxy URL for Unsplash API                                                                                                                        |
 | `displayLoadingIcon`  | `boolean`                  | no       | `true`                                                                          | Display loading icon when searching                                                                                                               |

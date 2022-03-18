@@ -265,135 +265,10 @@ var number$1 = propTypes.number,
     oneOfType$1 = propTypes.oneOfType;
 
 
-ErrorImage.propTypes = {
+ArrowIcon.propTypes = {
   width: oneOfType$1([number$1, string$1]),
   height: oneOfType$1([number$1, string$1]),
   style: object$1
-};
-
-function ErrorImage(_ref) {
-  var _ref$width = _ref.width,
-      width = _ref$width === undefined ? 143 : _ref$width,
-      _ref$height = _ref.height,
-      height = _ref$height === undefined ? 109 : _ref$height;
-
-  return React.createElement(
-    "svg",
-    { width: width, height: height, viewBox: "0 0 105.597 80.577" },
-    React.createElement(
-      "g",
-      { style: { opacity: 0.6000000000000001 } },
-      React.createElement("path", {
-        d: "M102.54,44.008A54.868,54.868,0,0,1,81.015,71.727c-9.272,5.971-19.156,7.447-30.5,4.956-11.219-2.521-22.3-7.648-31.46-12.508C9.971,59.07,2.81,54.393,1.033,47.046-.711,39.9,3.108,30,12.293,20.254,21.374,10.667,35.821,1.771,53,.307,70.062-1.411,85.737,4.279,94.726,12.58,103.947,20.923,106.493,32.285,102.54,44.008Z",
-        style: { fill: "#e1f0f9" }
-      })
-    ),
-    React.createElement(
-      "g",
-      { style: { opacity: 0.2 } },
-      React.createElement("path", {
-        d: "M66.594,79.257c-8.7,1.638-17.1.125-25.777-4.367C30.632,69.553,21.251,61.734,13.664,54.67,6.206,47.388.5,41.018.683,33.461c.118-5.34,3.446-11.323,9.623-16.895",
-        style: {
-          fill: "none",
-          stroke: "#bac7d3",
-          strokeMiterlimit: 10,
-          strokeWidth: 1.35656762123108 + "px"
-        }
-      }),
-      React.createElement("path", {
-        d: "M99.52,56.783A55.145,55.145,0,0,1,76.763,75.974",
-        style: {
-          fill: "none",
-          stroke: "#bac7d3",
-          strokeMiterlimit: 10,
-          strokeWidth: 1.35656762123108 + "px"
-        }
-      }),
-      React.createElement("path", {
-        d: "M23.837,7.561a64.4,64.4,0,0,1,39.137-5.8C79.9,4.51,93.565,14.061,100.1,24.4a27.717,27.717,0,0,1,3.922,22.51",
-        style: {
-          fill: "none",
-          stroke: "#bac7d3",
-          strokeMiterlimit: 10,
-          strokeWidth: 1.35656762123108 + "px"
-        }
-      })
-    ),
-    React.createElement("rect", {
-      x: "35.441",
-      y: "21.706",
-      width: "4.473",
-      height: "6.377",
-      rx: "0.873",
-      ry: "0.873",
-      style: { fill: "#ef5043" }
-    }),
-    React.createElement("rect", {
-      x: "45.478",
-      y: "19.136",
-      width: "18.25",
-      height: "8.946",
-      rx: "3",
-      ry: "3",
-      style: { fill: "#444" }
-    }),
-    React.createElement("rect", {
-      x: "31.772",
-      y: "23.609",
-      width: "45.663",
-      height: "31.5",
-      rx: "3",
-      ry: "3",
-      style: { fill: "#565656" }
-    }),
-    React.createElement("circle", { cx: "54.603", cy: "39.359", r: "10.909", style: { fill: "#707070" } }),
-    React.createElement("circle", { cx: "54.603", cy: "39.359", r: "6.901", style: { fill: "#dbdbdb" } }),
-    React.createElement("circle", { cx: "56.241", cy: "37.57", r: "2.827", style: { fill: "#fff" } }),
-    React.createElement("rect", {
-      x: "66.848",
-      y: "29.043",
-      width: "7",
-      height: "3.5",
-      rx: "1.75",
-      ry: "1.75",
-      style: { fill: "#ffc338" }
-    }),
-    React.createElement("circle", {
-      cx: "75.925",
-      cy: "52.566",
-      r: "5.858",
-      style: {
-        fill: "#fff",
-        stroke: "#ef5043",
-        strokeMiterlimit: 10,
-        strokeWidth: 2.7034974098205566 + "px"
-      }
-    }),
-    React.createElement("line", {
-      x1: "71.783",
-      y1: "56.708",
-      x2: "80.067",
-      y2: "48.424",
-      style: {
-        fill: "none",
-        stroke: "#ef5043",
-        strokeMiterlimit: 10,
-        strokeWidth: 2.7034974098205566 + "px"
-      }
-    })
-  );
-}
-
-var number$2 = propTypes.number,
-    object$2 = propTypes.object,
-    string$2 = propTypes.string,
-    oneOfType$2 = propTypes.oneOfType;
-
-
-ArrowIcon.propTypes = {
-  width: oneOfType$2([number$2, string$2]),
-  height: oneOfType$2([number$2, string$2]),
-  style: object$2
 };
 
 function ArrowIcon(_ref) {
@@ -422,8 +297,8 @@ function ArrowIcon(_ref) {
   );
 }
 
-var string$3 = propTypes.string,
-    object$3 = propTypes.object;
+var string$2 = propTypes.string,
+    object$2 = propTypes.object;
 
 
 var blank = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
@@ -507,8 +382,8 @@ var SpinnerImg = function (_React$Component) {
 }(React.Component);
 
 SpinnerImg.propTypes = {
-  src: string$3.isRequired,
-  style: object$3
+  src: string$2.isRequired,
+  style: object$2
 };
 SpinnerImg.defaultProps = { style: {} };
 
@@ -632,7 +507,7 @@ function withDefaultProps(Component, defaultProps) {
 }
 
 var shape = propTypes.shape,
-    string$4 = propTypes.string,
+    string$3 = propTypes.string,
     func$1 = propTypes.func;
 
 var BlobUploader = function (_React$Component) {
@@ -665,10 +540,10 @@ var BlobUploader = function (_React$Component) {
 
 BlobUploader.propTypes = {
   unsplashPhoto: shape({
-    id: string$4.isRequired,
+    id: string$3.isRequired,
     links: shape({
-      download: string$4.isRequired,
-      download_location: string$4.isRequired
+      download: string$3.isRequired,
+      download_location: string$3.isRequired
     }).isRequired
   }),
   downloadPhoto: func$1.isRequired,
@@ -676,7 +551,7 @@ BlobUploader.propTypes = {
   onBlobLoaded: func$1.isRequired
 };
 
-var string$5 = propTypes.string,
+var string$4 = propTypes.string,
     func$2 = propTypes.func,
     shape$1 = propTypes.shape;
 
@@ -745,17 +620,17 @@ var DataTransferUploader = function (_React$Component) {
 
 DataTransferUploader.propTypes = {
   unsplashPhoto: shape$1({
-    id: string$5.isRequired,
+    id: string$4.isRequired,
     links: shape$1({
-      download: string$5.isRequired,
-      download_location: string$5.isRequired
+      download: string$4.isRequired,
+      download_location: string$4.isRequired
     }).isRequired
   }),
   downloadPhoto: func$2.isRequired
 };
 
 var shape$2 = propTypes.shape,
-    string$6 = propTypes.string,
+    string$5 = propTypes.string,
     func$3 = propTypes.func;
 
 var Base64Uploader = function (_React$Component) {
@@ -829,10 +704,10 @@ var Base64Uploader = function (_React$Component) {
 
 Base64Uploader.propTypes = {
   unsplashPhoto: shape$2({
-    id: string$6.isRequired,
+    id: string$5.isRequired,
     links: shape$2({
-      download: string$6.isRequired,
-      download_location: string$6.isRequired
+      download: string$5.isRequired,
+      download_location: string$5.isRequired
     }).isRequired
   }),
   downloadPhoto: func$3.isRequired,
@@ -840,7 +715,7 @@ Base64Uploader.propTypes = {
 };
 
 var shape$3 = propTypes.shape,
-    string$7 = propTypes.string,
+    string$6 = propTypes.string,
     func$4 = propTypes.func;
 
 var ExternalLocationUploader = function (_React$Component) {
@@ -884,20 +759,20 @@ var ExternalLocationUploader = function (_React$Component) {
 
 ExternalLocationUploader.propTypes = {
   unsplashPhoto: shape$3({
-    id: string$7.isRequired,
+    id: string$6.isRequired,
     links: shape$3({
-      download: string$7.isRequired,
-      download_location: string$7.isRequired
+      download: string$6.isRequired,
+      download_location: string$6.isRequired
     }).isRequired
   }),
   downloadPhoto: func$4.isRequired,
   onFinishedUploading: func$4.isRequired,
-  uploadUrl: string$7.isRequired,
-  name: string$7.isRequired
+  uploadUrl: string$6.isRequired,
+  name: string$6.isRequired
 };
 
 var shape$4 = propTypes.shape,
-    string$8 = propTypes.string,
+    string$7 = propTypes.string,
     func$5 = propTypes.func;
 
 var InsertIntoApplicationUploader = function (_React$Component) {
@@ -930,21 +805,21 @@ var InsertIntoApplicationUploader = function (_React$Component) {
 
 InsertIntoApplicationUploader.propTypes = {
   unsplashPhoto: shape$4({
-    id: string$8.isRequired,
+    id: string$7.isRequired,
     links: shape$4({
-      download: string$8.isRequired,
-      download_location: string$8.isRequired
+      download: string$7.isRequired,
+      download_location: string$7.isRequired
     }).isRequired
   }),
   downloadPhoto: func$5.isRequired,
   onFinishedUploading: func$5.isRequired
 };
 
-var string$9 = propTypes.string,
+var string$8 = propTypes.string,
     func$6 = propTypes.func,
-    number$3 = propTypes.number,
+    number$2 = propTypes.number,
     bool = propTypes.bool,
-    object$4 = propTypes.object,
+    object$3 = propTypes.object,
     shape$5 = propTypes.shape;
 
 function noop() {}
@@ -1157,6 +1032,7 @@ var UnsplashPicker = function (_React$Component) {
           highlightColor = _props.highlightColor,
           placeholder = _props.placeholder,
           blankStateLabel = _props.blankStateLabel,
+          defaultErrorTitle = _props.defaultErrorTitle,
           defaultErrorMessage = _props.defaultErrorMessage,
           displayLoadingIcon = _props.displayLoadingIcon;
       var _state2 = this.state,
@@ -1231,6 +1107,7 @@ var UnsplashPicker = function (_React$Component) {
             error ? React.createElement(
               "div",
               {
+                className: "unspash-react-no-results-or-error",
                 style: {
                   textAlign: "center",
                   marginTop: "3em",
@@ -1238,10 +1115,28 @@ var UnsplashPicker = function (_React$Component) {
                   fontSize: 13
                 }
               },
-              React.createElement(ErrorImage, null),
+              React.createElement(
+                "svg",
+                {
+                  width: "64",
+                  height: "64",
+                  fill: "none",
+                  xmlns: "http://www.w3.org/2000/svg"
+                },
+                React.createElement("circle", { cx: "32", cy: "32", r: "32", fill: "#BDE5F9" }),
+                React.createElement("path", {
+                  d: "M27.5 24.75V18h9v6.75h-9Zm9 3.75H44V42H20V28.5h7.5v6.75h9V28.5Z",
+                  fill: "#fff"
+                })
+              ),
+              React.createElement(
+                "b",
+                { className: "unspash-react-no-results-or-error-label" },
+                defaultErrorTitle
+              ),
               React.createElement(
                 "p",
-                null,
+                { className: "unspash-react-no-results-or-error-secondary" },
                 defaultErrorMessage
               )
             ) : [photos.map(function (photo) {
@@ -1271,11 +1166,11 @@ var UnsplashPicker = function (_React$Component) {
             )],
             search.length > 0 && totalPhotosCount === 0 && !isLoadingSearch && React.createElement(
               "div",
-              { className: "unspash-react-no-results" },
+              { className: "unspash-react-no-results-or-error" },
               React.createElement(
                 "svg",
                 {
-                  className: "unspash-react-no-results-svg",
+                  className: "unspash-react-no-results-or-error-svg",
                   width: "64",
                   height: "64",
                   fill: "none",
@@ -1289,7 +1184,7 @@ var UnsplashPicker = function (_React$Component) {
               ),
               React.createElement(
                 "b",
-                { className: "unspash-react-no-results-label" },
+                { className: "unspash-react-no-results-or-error-label" },
                 blankStateLabel
               )
             )
@@ -1339,22 +1234,23 @@ var UnsplashPicker = function (_React$Component) {
 }(React.Component);
 
 UnsplashPicker.propTypes = {
-  proxyUrl: string$9,
-  customQueryParams: object$4,
-  placeholder: string$9,
-  defaultErrorMessage: string$9,
+  proxyUrl: string$8,
+  customQueryParams: object$3,
+  placeholder: string$8,
+  defaultErrorTitle: string$8,
+  defaultErrorMessage: string$8,
   displayLoadingIcon: bool,
-  blankStateLabel: string$9,
-  accessKey: string$9,
-  applicationName: string$9.isRequired,
-  columns: number$3,
-  defaultSearch: string$9,
-  highlightColor: string$9,
+  blankStateLabel: string$8,
+  accessKey: string$8,
+  applicationName: string$8.isRequired,
+  columns: number$2,
+  defaultSearch: string$8,
+  highlightColor: string$8,
   onFinishedUploading: func$6,
-  photoRatio: number$3,
+  photoRatio: number$2,
   preferredSize: shape$5({
-    width: number$3.isRequired,
-    height: number$3.isRequired
+    width: number$2.isRequired,
+    height: number$2.isRequired
   }),
   Uploader: func$6,
   __debug_chaosMonkey: bool
@@ -1365,7 +1261,8 @@ UnsplashPicker.defaultProps = {
   customQueryParams: {},
   placeholder: "Search Unsplash photos by topics or colors",
   blankStateLabel: "No photos found",
-  defaultErrorMessage: " We're having trouble communicating with Unsplash right now. Please try again.",
+  defaultErrorTitle: "Error",
+  defaultErrorMessage: "We're having trouble communicating with Unsplash right now. Please try again.",
   columns: 3,
   defaultSearch: "",
   highlightColor: "#00adf0",
@@ -1379,14 +1276,14 @@ UnsplashPicker.defaultProps = {
 function CSSStyles() {
   return React.createElement("style", {
     dangerouslySetInnerHTML: {
-      __html: "\n        .unsplash-react, .unsplash-react * { \n          box-sizing: border-box;\n          font-family: inherit;\n        }\n        .unsplash-react input::placeholder {\n          color: " + inputGray + ";\n          opacity: 1;\n        }\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0; }\n          to   { opacity: 1; }\n        }\n\n        .unsplash-react .p-r { position: relative; }\n        .unsplash-react .p-a { position: absolute; }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0; }\n\n        .unsplash-react .f-1 { flex: 1; }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex; }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100%; }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center; }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: " + borderRadius + "px; }\n\n        .unspash-react-image-grid{\n          position: relative;\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));\n          gap: 12px;\n          padding: 8px;\n          padding-left: 16px;\n          overflow-y: auto;\n          overflow-x: hidden;\n          scrollbar-color: #8492A6 transparent;\n        }\n\n        .unspash-react-image-grid::-webkit-scrollbar {\n          width: 8px;\n          height: 8px;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-thumb {\n          border-radius: 8px;\n          background-clip: padding-box;\n          background-color: #8492A6;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-button {\n          width: 0;\n          height: 0;\n          display: none;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-corner {\n          background-color: transparent;\n        }\n\n        .unsplash-react__image {\n          display: block;\n          width: 100%;\n          height: var(--imageHeight);\n          object-fit: cover;\n        }\n\n        .unsplash-react-wrapper{\n          height: 30px,\n          line-height: 22px,\n          font-style: normal,\n          font-weight: normal,\n          font-size: 14px,\n          position: relative;\n          display: flex;\n          width: 100%;\n          position: relative;\n        }\n       \n        .unspash-react-input {\n          padding: 8px 16px;\n          outline: none;\n          border: none;\n          height: 100%;\n          outline: none;\n          width: 100%;\n          text-indent: 30px;\n          background: #F9FAFC;\n          border-bottom: 2px solid #D5E0ED;\n          border-radius: 4px 4px 0px 0px;\n        }\n        .unsplash-react input::placeholder {\n          opacity: 1\n          color: #8492A6;\n        }\n        .unspash-react-input:hover {\n          background: #F0F4F9;\n          border-bottom-color: #8492A6;\n        }        \n        .unspash-react-input:focus {\n          background: #EBF8FF;\n          border-bottom-color: #009AE7;\n        }\n        .unspash-react-input[data-error=\"true\"] {\n          background: #FFE8E8;\n          border-bottom-color: #D83818;\n        }\n\n        .unspash-react-search-icon{\n          position: absolute;\n          top: 8px;\n          left: 16px;\n          z-index: 1;\n          color: #54677B;\n        }\n        .unspash-react-search-icon svg {\n          color: #54677B;\n        }\n\n        .unspash-react-search-icon svg circle{\n          stroke: #54677B;\n        }\n\n\n        .unspash-react-no-results {\n          position: absolute;\n          width: 100%;\n          height: 100%;\n          display: flex;\n          justify-content: start;\n          align-items: center;\n          flex-direction: column;\n        }\n        .unspash-react-no-results-svg{\n          margin-top: 100px;\n        }\n\n        .unspash-react-no-results-label{\n          font-size: 16px;\n          font-weight: 700;\n          line-height: 24px;\n          text-align: center;\n          margin-top: 24px;\n        }\n        \n        .unspash-react-input[data-error=\"true\"] + .unspash-react-search-icon {\n          // color:  #D83818;\n        }\n\n        .unspash-react-input:focus + .unspash-react-search-icon {\n          // color: #009AE7;\n        }\n      "
+      __html: "\n        .unsplash-react, .unsplash-react * { \n          box-sizing: border-box;\n          font-family: inherit;\n        }\n        .unsplash-react input::placeholder {\n          color: " + inputGray + ";\n          opacity: 1;\n        }\n        @keyframes unsplash-react-fadein {\n          from { opacity: 0; }\n          to   { opacity: 1; }\n        }\n\n        .unsplash-react .p-r { position: relative; }\n        .unsplash-react .p-a { position: absolute; }\n\n        .unsplash-react.p-0,\n        .unsplash-react .p-0 { padding: 0; }\n\n        .unsplash-react .f-1 { flex: 1; }\n\n        .unsplash-react.d-f,\n        .unsplash-react .d-f { display: flex; }\n\n        .unsplash-react.h-f,\n        .unsplash-react .h-f { height: 100%; }\n\n        .unsplash-react.ai-c,\n        .unsplash-react .ai-c { align-items: center; }\n\n        .unsplash-react.border-radius,\n        .unsplash-react .border-radius { border-radius: " + borderRadius + "px; }\n\n        .unspash-react-image-grid{\n          position: relative;\n          display: grid;\n          grid-template-columns: repeat(auto-fit, minmax(calc(var(--imageWidth) - 16px), 1fr));\n          gap: 12px;\n          padding: 8px;\n          padding-left: 16px;\n          overflow-y: auto;\n          overflow-x: hidden;\n          scrollbar-color: #8492A6 transparent;\n        }\n\n        .unspash-react-image-grid::-webkit-scrollbar {\n          width: 8px;\n          height: 8px;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-thumb {\n          border-radius: 8px;\n          background-clip: padding-box;\n          background-color: #8492A6;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-button {\n          width: 0;\n          height: 0;\n          display: none;\n        }\n        .unspash-react-image-grid::-webkit-scrollbar-corner {\n          background-color: transparent;\n        }\n\n        .unsplash-react__image {\n          display: block;\n          width: 100%;\n          height: var(--imageHeight);\n          object-fit: cover;\n        }\n\n        .unsplash-react-wrapper{\n          height: 30px,\n          line-height: 22px,\n          font-style: normal,\n          font-weight: normal,\n          font-size: 14px,\n          position: relative;\n          display: flex;\n          width: 100%;\n          position: relative;\n        }\n       \n        .unspash-react-input {\n          padding: 8px 16px;\n          outline: none;\n          border: none;\n          height: 100%;\n          outline: none;\n          width: 100%;\n          text-indent: 30px;\n          background: #F9FAFC;\n          border-bottom: 2px solid #D5E0ED;\n          border-radius: 4px 4px 0px 0px;\n        }\n        .unsplash-react input::placeholder {\n          opacity: 1\n          color: #8492A6;\n        }\n        .unspash-react-input:hover {\n          background: #F0F4F9;\n          border-bottom-color: #8492A6;\n        }        \n        .unspash-react-input:focus {\n          background: #EBF8FF;\n          border-bottom-color: #009AE7;\n        }\n        .unspash-react-input[data-error=\"true\"] {\n          background: #FFE8E8;\n          border-bottom-color: #D83818;\n        }\n\n        .unspash-react-search-icon{\n          position: absolute;\n          top: 8px;\n          left: 16px;\n          z-index: 1;\n          color: #54677B;\n        }\n        .unspash-react-search-icon svg {\n          color: #54677B;\n        }\n\n        .unspash-react-search-icon svg circle{\n          stroke: #54677B;\n        }\n\n\n        .unspash-react-no-results-or-error {\n          position: absolute;\n          width: 100%;\n          height: 100%;\n          display: flex;\n          justify-content: start;\n          align-items: center;\n          flex-direction: column;\n        }\n        .unspash-react-no-results-or-error-svg{\n          margin-top: 100px;\n        }\n\n        .unspash-react-no-results-or-error-label{\n          font-size: 16px;\n          font-weight: 700;\n          line-height: 24px;\n          text-align: center;\n          margin-top: 24px;\n        }\n\n        .unspash-react-no-results-or-error-secondary{\n          max-width: 224px;\n          margin: 0 auto;\n          margin-top: 16px;\n          font-size: 12px;\n          font-weight: 700;\n          text-align: center;\n          color: #8492A6;\n        }\n        \n        .unspash-react-input[data-error=\"true\"] + .unspash-react-search-icon {\n          // color:  #D83818;\n        }\n\n        .unspash-react-input:focus + .unspash-react-search-icon {\n          // color: #009AE7;\n        }\n      "
     }
   });
 }
 
 AbsolutelyCentered.propTypes = {
-  width: number$3.isRequired,
-  height: number$3.isRequired
+  width: number$2.isRequired,
+  height: number$2.isRequired
 };
 function AbsolutelyCentered(_ref5) {
   var width = _ref5.width,
@@ -1406,9 +1303,9 @@ function AbsolutelyCentered(_ref5) {
 }
 
 OverflowFadeLink.propTypes = {
-  href: string$9.isRequired,
-  style: object$4.isRequired,
-  wrapperClassName: string$9.isRequired
+  href: string$8.isRequired,
+  style: object$3.isRequired,
+  wrapperClassName: string$8.isRequired
 };
 function OverflowFadeLink(_ref6) {
   var wrapperClassName = _ref6.wrapperClassName,
@@ -1451,16 +1348,16 @@ function OverflowFadeLink(_ref6) {
 
 Photo.propTypes = {
   photo: shape$5({
-    id: string$9.isRequired,
+    id: string$8.isRequired,
     urls: shape$5({
-      small: string$9.isRequired
+      small: string$8.isRequired
     }).isRequired,
-    user: shape$5({ links: shape$5({ html: string$9.isRequired }).isRequired }).isRequired
+    user: shape$5({ links: shape$5({ html: string$8.isRequired }).isRequired }).isRequired
   }).isRequired,
-  loadingPhoto: shape$5({ id: string$9.isRequired }),
-  selectedPhoto: shape$5({ id: string$9.isRequired }),
+  loadingPhoto: shape$5({ id: string$8.isRequired }),
+  selectedPhoto: shape$5({ id: string$8.isRequired }),
   onPhotoClick: func$6.isRequired,
-  highlightColor: string$9.isRequired,
+  highlightColor: string$8.isRequired,
   utmLink: func$6.isRequired
 };
 function Photo(_ref7) {

@@ -3,7 +3,6 @@ import UnsplashWrapper from "./unsplash_wrapper"
 import Spinner from "react-svg-spinner"
 import propTypes from "prop-types"
 import SearchIcon from "./search_icon"
-import ErrorImage from "./error_image"
 import ArrowIcon from "./arrow_icon"
 import SpinnerImg from "./spinner_img"
 import ReactIntersectionObserver from "./react_intersection_observer.js"
@@ -27,6 +26,7 @@ export default class UnsplashPicker extends React.Component {
     proxyUrl: string,
     customQueryParams: object,
     placeholder: string,
+    defaultErrorTitle: string,
     defaultErrorMessage: string,
     displayLoadingIcon: bool,
     blankStateLabel: string,
@@ -51,6 +51,7 @@ export default class UnsplashPicker extends React.Component {
     customQueryParams: {},
     placeholder: "Search Unsplash photos by topics or colors",
     blankStateLabel: "No photos found",
+    defaultErrorTitle: "Error",
     defaultErrorMessage:
       "We're having trouble communicating with Unsplash right now. Please try again.",
     columns: 3,
@@ -270,6 +271,7 @@ export default class UnsplashPicker extends React.Component {
       highlightColor,
       placeholder,
       blankStateLabel,
+      defaultErrorTitle,
       defaultErrorMessage,
       displayLoadingIcon,
     } = this.props
@@ -347,6 +349,7 @@ export default class UnsplashPicker extends React.Component {
           >
             {error ? (
               <div
+                className="unspash-react-no-results-or-error"
                 style={{
                   textAlign: "center",
                   marginTop: "3em",
@@ -354,8 +357,24 @@ export default class UnsplashPicker extends React.Component {
                   fontSize: 13,
                 }}
               >
-                <ErrorImage />
-                <p>{defaultErrorMessage}</p>
+                <svg
+                  width="64"
+                  height="64"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="32" cy="32" r="32" fill="#BDE5F9" />
+                  <path
+                    d="M27.5 24.75V18h9v6.75h-9Zm9 3.75H44V42H20V28.5h7.5v6.75h9V28.5Z"
+                    fill="#fff"
+                  />
+                </svg>
+                <b className="unspash-react-no-results-or-error-label">
+                  {defaultErrorTitle}
+                </b>
+                <p className="unspash-react-no-results-or-error-secondary" >
+                  {defaultErrorMessage}
+                </p>
               </div>
             ) : (
               [
@@ -394,9 +413,9 @@ export default class UnsplashPicker extends React.Component {
             {search.length > 0 &&
               totalPhotosCount === 0 &&
               !isLoadingSearch && (
-                <div className="unspash-react-no-results">
+                <div className="unspash-react-no-results-or-error">
                   <svg
-                    className="unspash-react-no-results-svg"
+                    className="unspash-react-no-results-or-error-svg"
                     width="64"
                     height="64"
                     fill="none"
@@ -408,7 +427,7 @@ export default class UnsplashPicker extends React.Component {
                       fill="#fff"
                     />
                   </svg>
-                  <b className="unspash-react-no-results-label">
+                  <b className="unspash-react-no-results-or-error-label">
                     {blankStateLabel}
                   </b>
                 </div>
@@ -582,7 +601,7 @@ function CSSStyles() {
         }
 
 
-        .unspash-react-no-results {
+        .unspash-react-no-results-or-error {
           position: absolute;
           width: 100%;
           height: 100%;
@@ -591,16 +610,26 @@ function CSSStyles() {
           align-items: center;
           flex-direction: column;
         }
-        .unspash-react-no-results-svg{
+        .unspash-react-no-results-or-error-svg{
           margin-top: 100px;
         }
 
-        .unspash-react-no-results-label{
+        .unspash-react-no-results-or-error-label{
           font-size: 16px;
           font-weight: 700;
           line-height: 24px;
           text-align: center;
           margin-top: 24px;
+        }
+
+        .unspash-react-no-results-or-error-secondary{
+          max-width: 224px;
+          margin: 0 auto;
+          margin-top: 16px;
+          font-size: 12px;
+          font-weight: 700;
+          text-align: center;
+          color: #8492A6;
         }
         
         .unspash-react-input[data-error="true"] + .unspash-react-search-icon {
