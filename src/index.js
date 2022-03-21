@@ -263,6 +263,7 @@ export default class UnsplashPicker extends React.Component {
     return this.totalResults > this.resultsPerPage * this.state.page
   }
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       Uploader,
@@ -372,7 +373,7 @@ export default class UnsplashPicker extends React.Component {
                 <b className="unspash-react-no-results-or-error-label">
                   {defaultErrorTitle}
                 </b>
-                <p className="unspash-react-no-results-or-error-secondary" >
+                <p className="unspash-react-no-results-or-error-secondary">
                   {defaultErrorMessage}
                 </p>
               </div>
@@ -412,7 +413,8 @@ export default class UnsplashPicker extends React.Component {
 
             {search.length > 0 &&
               totalPhotosCount === 0 &&
-              !isLoadingSearch && (
+              !isLoadingSearch &&
+              !error && (
                 <div className="unspash-react-no-results-or-error">
                   <svg
                     className="unspash-react-no-results-or-error-svg"

@@ -2926,6 +2926,9 @@
 	    }
 	  }, {
 	    key: "render",
+
+
+	    // eslint-disable-next-line complexity
 	    value: function render() {
 	      var _this2 = this;
 
@@ -3068,7 +3071,7 @@
 	              },
 	              this.hasMoreResults && react.createElement(Spinner, { size: "40px" })
 	            )],
-	            search.length > 0 && totalPhotosCount === 0 && !isLoadingSearch && react.createElement(
+	            search.length > 0 && totalPhotosCount === 0 && !isLoadingSearch && !error && react.createElement(
 	              "div",
 	              { className: "unspash-react-no-results-or-error" },
 	              react.createElement(
