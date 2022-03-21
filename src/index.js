@@ -627,6 +627,7 @@ function CSSStyles() {
           margin: 0 auto;
           margin-top: 16px;
           font-size: 12px;
+          line-height: 16px;
           font-weight: 700;
           text-align: center;
           color: #8492A6;
