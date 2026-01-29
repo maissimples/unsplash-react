@@ -41,7 +41,7 @@
     "dev": "rollup -c -w",
     "build": "NODE_ENV=production rollup -c",
     "release": "release-it",
-    "prepare": "yarn build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
